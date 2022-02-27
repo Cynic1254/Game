@@ -10,6 +10,10 @@ public:
     Transform(Tmpl8::vec2 position) : 
         position(position)
     {};
+    Transform(Tmpl8::vec2 position, bool isLocal) : 
+        offset(position), 
+        bindToScreen(isLocal) 
+    {};
 
     /// <summary>
     /// set the position
@@ -50,8 +54,12 @@ public:
     static void SetScreenPosition(Tmpl8::vec2 screenPosition);
 
     static void AddScreenPosition(Tmpl8::vec2 screenPosition);
+
+    void Update(Entity& entity) override;
 protected:
 private:
+    bool bindToScreen = false;
     Tmpl8::vec2 position;
+    Tmpl8::vec2 offset;
     static Tmpl8::vec2 screenPosition;
 };

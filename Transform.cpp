@@ -89,3 +89,11 @@ void Transform::AddScreenPosition(Tmpl8::vec2 screenPosition)
 {
     Transform::screenPosition += screenPosition;
 }
+
+void Transform::Update(Entity& entity)
+{
+    if (bindToScreen)
+    {
+        SetPosition(offset + screenPosition);
+    }
+}

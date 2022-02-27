@@ -3,6 +3,9 @@
 #include "Entity.h"
 #include "template.h"
 #include "BoxCollider.h"
+#include "RenderComponent.h"
+
+#include <cassert>
 
 constexpr double speed = 60;
 constexpr float leftBound = 0;
@@ -11,8 +14,9 @@ constexpr float rightBound = 1000;
 void PlayerController::Update(Entity& entity)
 {
     Transform* transform = entity.GetComponent<Transform>();
-    if (transform == nullptr)
-        return;
+    RenderComponent* renderComponent = entity.GetComponent<RenderComponent>();
+    
+    assert(transform != nullptr || renderComponent != nullptr);
 
     double delta = timer.ElapsedSeconds();
 
@@ -29,9 +33,13 @@ void PlayerController::Update(Entity& entity)
 
     y += speed * delta;
 
+    if ((transform->GetPosition().x < leftBound && x < 0.0) || (transform->GetPosition().x > rightBound && x > 0.0))
+        x = 0.0;
+
     transform->CollisionAdd(entity, { (float)x, (float)y });
-    if (transform->GetPosition().x <= leftBound || transform->GetPosition().x >= rightBound)
-        transform->SetScreenPosition({ transform->GetScreenPosition().x, transform->GetPosition().y });
+    if (transform->GetPosition().x <= leftBound + (ScreenWidth / 2) - renderComponent->GetWidth() / 2 ||
+        transform->GetPosition().x >= rightBound - (ScreenWidth / 2) + renderComponent->GetWidth() / 2)
+        transform->SetScreenPosition({transform->GetScreenPosition().x, transform->GetPosition().y });
     else
         transform->SetScreenPosition(transform->GetPosition());
 }
