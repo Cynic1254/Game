@@ -1,66 +1,52 @@
 #include "PlayerController.h"
+
 #include "Transform.h"
 #include "Entity.h"
 #include "template.h"
 #include "BoxCollider.h"
 #include "RenderComponent.h"
+#include "game.h"
+#include "Fysics.h"
+
+#include "settings.h"
 
 #include <cassert>
+#include <vector>
 
-constexpr double speed = 60;
-constexpr float leftBound = 0;
-constexpr float rightBound = 1000;
+float PlayerController::yMovement = 0.0f;
 
 void PlayerController::Update(Entity& entity)
 {
     Transform* transform = entity.GetComponent<Transform>();
-    RenderComponent* renderComponent = entity.GetComponent<RenderComponent>();
-    
-    assert(transform != nullptr || renderComponent != nullptr);
+
+    assert(transform != nullptr);
 
     double delta = timer.ElapsedSeconds();
 
-    double x = .0, y = .0;
+    double x = .0;
 
     if (right)
-        x += speed * delta;
+        x += PlayerSpeed * delta;
     if (left)
-        x -= speed * delta;
-    if (down)
-        y += speed * delta;
-    if (up)
-        y -= speed * delta;
+        x -= PlayerSpeed * delta;
 
-    y += speed * delta;
-
-    if ((transform->GetPosition().x < leftBound && x < 0.0) || (transform->GetPosition().x > rightBound && x > 0.0))
-        x = 0.0;
-
-    transform->CollisionAdd(entity, { (float)x, (float)y });
-    if (transform->GetPosition().x <= leftBound + (ScreenWidth / 2) - renderComponent->GetWidth() / 2 ||
-        transform->GetPosition().x >= rightBound - (ScreenWidth / 2) + renderComponent->GetWidth() / 2)
-        transform->SetScreenPosition({transform->GetScreenPosition().x, transform->GetPosition().y });
-    else
-        transform->SetScreenPosition(transform->GetPosition());
+    if (!BoxCollider::Collides(entity, Tmpl8::vec2{ 0.0f, (float)(PlayerSpeed * delta) }))
+    {
+        yMovement = PlayerSpeed * delta;
+    }
+    if (!BoxCollider::Collides(entity, { (float)x, (float)(PlayerSpeed * delta) }))
+    {
+        transform->AddPosition({ (float)x, 0.0f });
+    }
 }
 
 void PlayerController::KeyDown(Entity& entity, SDL_Scancode key)
 {
     switch (key)
     {
-    case SDL_SCANCODE_W:
-    case SDL_SCANCODE_UP:
-        up = true;
-        break;
-
     case SDL_SCANCODE_A:
     case SDL_SCANCODE_LEFT:
         left = true;
-        break;
-
-    case SDL_SCANCODE_S:
-    case SDL_SCANCODE_DOWN:
-        down = true;
         break;
 
     case SDL_SCANCODE_D:
@@ -77,19 +63,9 @@ void PlayerController::KeyUp(Entity& entity, SDL_Scancode key)
 {
     switch (key)
     {
-    case SDL_SCANCODE_W:
-    case SDL_SCANCODE_UP:
-        up = false;
-        break;
-
     case SDL_SCANCODE_A:
     case SDL_SCANCODE_LEFT:
         left = false;
-        break;
-
-    case SDL_SCANCODE_S:
-    case SDL_SCANCODE_DOWN:
-        down = false;
         break;
 
     case SDL_SCANCODE_D:

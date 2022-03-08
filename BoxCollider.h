@@ -62,6 +62,7 @@ public:
     /// <returns></returns>
     bool CollidesAt(Tmpl8::vec2 pos, BoxCollider& b);
 
+
     /// <summary>
     /// checks if current component is colliding
     /// </summary>
@@ -76,6 +77,7 @@ public:
     /// <param name="b"></param>
     /// <returns></returns>
     static bool Collides(BoxCollider& a, BoxCollider& b);
+    static bool Collides(Entity& entity, Tmpl8::vec2 pos);
 
     CollisionType GetType() { return type; }
 protected:
@@ -83,4 +85,3 @@ private:
     CollisionType type = CollisionType::none;
     Bounds bounds;
 };
-

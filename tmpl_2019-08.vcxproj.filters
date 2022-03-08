@@ -25,6 +25,10 @@
     <ClCompile Include="PlayerController.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Fysics.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="settings.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h" />
@@ -49,6 +53,9 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="PlayerController.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Fysics.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
