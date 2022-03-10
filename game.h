@@ -40,7 +40,7 @@ namespace Tmpl8 {
 	private:
 		Surface* screen = nullptr;
 		Surface* background = nullptr;
-		Entity* player;
+		Entity* player = nullptr;
 		std::vector<Entity*> entities;
 
 		static Game* theGame;

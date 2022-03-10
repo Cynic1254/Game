@@ -6,14 +6,13 @@
 #include "BoxCollider.h"
 #include "RenderComponent.h"
 #include "game.h"
-#include "Fysics.h"
 
 #include "settings.h"
 
 #include <cassert>
 #include <vector>
 
-float PlayerController::yMovement = 0.0f;
+double PlayerController::yMovement = 0.0f;
 
 void PlayerController::Update(Entity& entity)
 {
@@ -33,11 +32,15 @@ void PlayerController::Update(Entity& entity)
     if (!BoxCollider::Collides(entity, Tmpl8::vec2{ 0.0f, (float)(PlayerSpeed * delta) }))
     {
         yMovement = PlayerSpeed * delta;
+        std::cout << "moved y" << std::endl;
     }
     if (!BoxCollider::Collides(entity, { (float)x, (float)(PlayerSpeed * delta) }))
     {
         transform->AddPosition({ (float)x, 0.0f });
+        std::cout << "moved x" << std::endl;
     }
+
+    std::cout << BoxCollider::Collides(entity, { (float)x, (float)(PlayerSpeed * delta) }) << std::endl;
 }
 
 void PlayerController::KeyDown(Entity& entity, SDL_Scancode key)

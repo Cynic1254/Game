@@ -25,10 +25,10 @@
     <ClCompile Include="PlayerController.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Fysics.cpp">
+    <ClCompile Include="settings.h" />
+    <ClCompile Include="Loop.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="settings.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h" />
@@ -55,7 +55,7 @@
     <ClInclude Include="PlayerController.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Fysics.h">
+    <ClInclude Include="Loop.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

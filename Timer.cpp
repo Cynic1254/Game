@@ -19,7 +19,7 @@ void Timer::Tick()
     auto delta = t1 - t0;
     t0 = t1;
 
-    elapsedTime = delta.count();
+    elapsedTime = (double)delta.count();
     totalTime += elapsedTime;
 }
 

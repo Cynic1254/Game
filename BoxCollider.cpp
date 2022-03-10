@@ -43,9 +43,12 @@ bool BoxCollider::Collides(Entity& entity, Tmpl8::vec2 pos)
         return false;
 
     if (&entity != Tmpl8::Game::Get().GetPlayer())
-        colliders.insert(std::end(colliders), 
-            std::begin(Tmpl8::Game::Get().GetPlayer()->GetComponents<BoxCollider>()), 
-            std::end(Tmpl8::Game::Get().GetPlayer()->GetComponents<BoxCollider>()));
+    {
+        std::vector<BoxCollider*> playerColliders = Tmpl8::Game::Get().GetPlayer()->GetComponents<BoxCollider>();
+        colliders.insert(std::end(colliders),
+            std::begin(playerColliders),
+            std::end(playerColliders));
+    }
 
     std::vector<Entity*> entities = Tmpl8::Game::Get().GetEntities();
 
@@ -53,9 +56,10 @@ bool BoxCollider::Collides(Entity& entity, Tmpl8::vec2 pos)
     {
         if (e != &entity)
         {
+            std::vector<BoxCollider*> eColliders = e->GetComponents<BoxCollider>();
             colliders.insert(std::end(colliders),
-                std::begin(e->GetComponents<BoxCollider>()),
-                std::end(e->GetComponents<BoxCollider>()));
+                std::begin(eColliders),
+                std::end(eColliders));
         }
     }
 
@@ -72,6 +76,11 @@ bool BoxCollider::Collides(Entity& entity, Tmpl8::vec2 pos)
     }
 
     return false;
+}
+
+void BoxCollider::Render(Entity& entity, Tmpl8::Surface& dst)
+{
+    dst.Box(bounds.min.x, bounds.min.y, bounds.max.x, bounds.max.y, 0x000000);
 }
 
 bool BoxCollider::Collides(BoxCollider& a, BoxCollider& b)

@@ -19,7 +19,7 @@ public:
     virtual void KeyDown(Entity& entity, SDL_Scancode key) override;
     virtual void KeyUp(Entity& entity, SDL_Scancode key) override;
 
-    static float GetYMovement() { return yMovement; }
+    static double GetYMovement() { return yMovement; }
 protected:
 private:
     Timer& timer;
@@ -27,5 +27,5 @@ private:
     bool left = false;
     bool right = false;
 
-    static float yMovement;
+    static double yMovement;
 };

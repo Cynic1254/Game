@@ -1,24 +1,42 @@
 #pragma once
 #include "Component.h"
 #include "surface.h"
+#include "template.h"
+
+#include <map>
 
 typedef unsigned int Pixel;
+
+struct RenderObject
+{
+    RenderObject(float x, float y, Tmpl8::Sprite& sprite, Tmpl8::Surface* screen) : 
+        pos(x, y),
+        sprite(sprite),
+        dst(screen)
+    {}
+
+    RenderObject(Tmpl8::vec2 pos, Tmpl8::Sprite& sprite, Tmpl8::Surface* screen) :
+        pos(pos),
+        sprite(sprite),
+        dst(screen)
+    {}
+
+    Tmpl8::vec2 pos;
+    Tmpl8::Sprite& sprite;
+    Tmpl8::Surface* dst;
+};
 
 class RenderComponent :
     public Component
 {
 public:
-    RenderComponent() = default;
     RenderComponent(Tmpl8::Surface* surface, int numFrames) : 
         sprite(surface, numFrames)
     {}
 
-    /// <summary>
-    /// renders the entity tp the screen
-    /// </summary>
-    /// <param name="entity"></param>
-    /// <param name="screen"></param>
-    virtual void Render(Entity& entity, Tmpl8::Surface& screen) override;
+    void Render(Entity& entity, Tmpl8::Surface& screen);
+
+    static void RenderAll();
 
     /// <summary>
     /// set the frame
@@ -54,5 +72,6 @@ protected:
 
 private:
     Tmpl8::Sprite sprite;
-};
 
+    static std::multimap<float, RenderObject> renderQueue;
+};

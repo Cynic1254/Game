@@ -80,6 +80,8 @@ public:
     static bool Collides(Entity& entity, Tmpl8::vec2 pos);
 
     CollisionType GetType() { return type; }
+
+    virtual void Render(Entity& entity, Tmpl8::Surface& dst) override;
 protected:
 private:
     CollisionType type = CollisionType::none;

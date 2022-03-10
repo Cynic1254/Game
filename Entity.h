@@ -16,7 +16,7 @@ namespace Tmpl8
 class Entity
 {
 public:
-    Entity() { printf("map initialized with size: %i\n", (int)components.size()); };
+    Entity() = default;
 
     Entity(const Entity& copy) = delete;
     Entity& operator=(const Entity&) = delete;
