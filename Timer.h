@@ -4,8 +4,6 @@
 class Timer
 {
 public:
-    Timer();
-
     /// <summary>
     /// returns the timer object
     /// </summary>
@@ -36,4 +34,6 @@ private:
     std::chrono::high_resolution_clock::time_point t0, t1;
     double elapsedTime;
     double totalTime;
+
+    Timer();
 };

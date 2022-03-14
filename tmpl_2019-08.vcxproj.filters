@@ -26,7 +26,7 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="settings.h" />
-    <ClCompile Include="Loop.cpp">
+    <ClCompile Include="Wrap.cpp">
       <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -55,7 +55,7 @@
     <ClInclude Include="PlayerController.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Loop.h">
+    <ClInclude Include="Wrap.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -71,5 +71,8 @@
     <Text Include="_readme.txt">
       <Filter>template code</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".clang-format" />
   </ItemGroup>
 </Project>

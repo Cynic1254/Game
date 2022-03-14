@@ -1,92 +1,41 @@
 #include "BoxCollider.h"
 
 #include "Transform.h"
-#include "surface.h"
 #include "game.h"
 
-#include <cassert>
-#include <vector>
+class Entity;
 
-void BoxCollider::Update(Entity& entity)
-{
-    Transform* transformComponent = entity.GetComponent<Transform>();
-    assert(transformComponent != nullptr);
+std::vector<std::pair<Entity &, int>> BoxCollider::At(Tmpl8::vec2 pos, Bounds bounds) {
+  const std::vector<Entity *>& entities = Tmpl8::Game::Get().GetEntities();
 
-    bounds.min = transformComponent->GetPosition() + bounds.offset;
-    bounds.max = transformComponent->GetPosition() + bounds.size + bounds.offset;
-}
+  std::vector<std::pair<Entity &, int>> returnValue;
 
-bool BoxCollider::CollidesAt(Tmpl8::vec2 pos, BoxCollider& b)
-{
-    Bounds a(pos + bounds.offset, Tmpl8::vec2{ pos.x + bounds.size.x, pos.y + bounds.size.y } + bounds.offset);
-    return  a.min.x < b.bounds.max.x &&
-            a.max.x > b.bounds.min.x &&
-            a.min.y < b.bounds.max.y &&
-            a.max.y > b.bounds.min.y;
-}
+  for (auto e : entities) {
+    Transform* transform = e->GetComponent<Transform>();
+    std::vector<BoxCollider *> boxcollider = e->GetComponents<BoxCollider>();
+    if (transform == nullptr || boxcollider.size() == 0)
+      continue;
 
-bool BoxCollider::Collides(BoxCollider& b)
-{
-    BoxCollider& a = *this;
-    return  a.bounds.min.x < b.bounds.max.x &&
-            a.bounds.max.x > b.bounds.min.x &&
-            a.bounds.min.y < b.bounds.max.y &&
-            a.bounds.max.y > b.bounds.min.y;
-}
+    Tmpl8::vec2 pos = transform->GetPosition();
 
-bool BoxCollider::Collides(Entity& entity, Tmpl8::vec2 pos)
-{
-    std::vector<BoxCollider*> colliders;
-    std::vector<BoxCollider*> entityColliders = entity.GetComponents<BoxCollider>();
+    int collisions = 0;
 
-    if (entityColliders.size() == 0)
-        return false;
+    for (auto c : boxcollider) {
 
-    if (&entity != Tmpl8::Game::Get().GetPlayer())
-    {
-        std::vector<BoxCollider*> playerColliders = Tmpl8::Game::Get().GetPlayer()->GetComponents<BoxCollider>();
-        colliders.insert(std::end(colliders),
-            std::begin(playerColliders),
-            std::end(playerColliders));
+      Bounds bounds = c->GetBounds();
+
+      Tmpl8::vec2 min = pos + bounds.offset;
+      Tmpl8::vec2 max = pos + bounds.offset + bounds.size;
+
+      if (pos.x > min.x && pos.y > min.y && pos.x < max.x && pos.y < max.y) {
+        collisions = collisions | (int)c->GetCollisionType();
+      }
     }
 
-    std::vector<Entity*> entities = Tmpl8::Game::Get().GetEntities();
-
-    for (auto& e : entities)
-    {
-        if (e != &entity)
-        {
-            std::vector<BoxCollider*> eColliders = e->GetComponents<BoxCollider>();
-            colliders.insert(std::end(colliders),
-                std::begin(eColliders),
-                std::end(eColliders));
-        }
+    if (collisions != 0) {
+      returnValue.push_back({*e, collisions});
     }
+  }
 
-    if (colliders.size() == 0)
-        return false;
-
-    for (auto& c : entityColliders)
-    {
-        for (auto& e : colliders)
-        {
-            if (c->CollidesAt(pos, *e))
-                return true;
-        }
-    }
-
-    return false;
-}
-
-void BoxCollider::Render(Entity& entity, Tmpl8::Surface& dst)
-{
-    dst.Box(bounds.min.x, bounds.min.y, bounds.max.x, bounds.max.y, 0x000000);
-}
-
-bool BoxCollider::Collides(BoxCollider& a, BoxCollider& b)
-{
-    return  a.bounds.min.x < b.bounds.max.x && 
-            a.bounds.max.x > b.bounds.min.x &&
-            a.bounds.min.y < b.bounds.max.y && 
-            a.bounds.max.y > b.bounds.min.y;
+  return returnValue;
 }

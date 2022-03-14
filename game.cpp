@@ -5,7 +5,7 @@
 #include "PlayerController.h"
 #include "surface.h"
 #include "BoxCollider.h"
-#include "Loop.h"
+#include "Wrap.h"
 
 #include "settings.h"
 
@@ -77,9 +77,17 @@ namespace Tmpl8
 		border->AddComponent<RenderComponent>(&treeBorder, 1);
 		border->AddComponent<Transform>(Tmpl8::vec2{ 0, -tileSize });
 		border->AddComponent<BoxCollider>(Bounds({ 0.0f, 0.0f }, { (float)treeBorder.GetWidth(), (float)treeBorder.GetHeight() }), CollisionType::block);
-		border->AddComponent<Loop>();
+		border->AddComponent<Wrap>();
 
 		entities.push_back(border);
+
+		Entity* border2 = new Entity;
+		border2->AddComponent<RenderComponent>(&treeBorder, 1);
+		border2->AddComponent<Transform>(Tmpl8::vec2{ rightScreenBound - treeBorder.GetWidth(), -tileSize });
+		border2->AddComponent<BoxCollider>(Bounds({ 0.0f, 0.0f }, { (float)treeBorder.GetWidth(), (float)treeBorder.GetHeight() }), CollisionType::block);
+		border2->AddComponent<Wrap>();
+
+		entities.push_back(border2);
 	}
 	
 	// -----------------------------------------------------------
