@@ -8,9 +8,9 @@
 class Entity;
 
 enum class CollisionType {
-    none    =   0,
-    block   =   1,
-    hurt    =   2
+    none    =   (1 << 0),
+    block   =   (1 << 1), 
+    hurt    =   (1 << 2)
 };
 
 struct Bounds {
