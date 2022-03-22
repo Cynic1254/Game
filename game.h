@@ -24,7 +24,7 @@ namespace Tmpl8 {
 
 		static Game& Get();
 
-		const Entity* GetPlayer() { return player; }
+		Entity& GetPlayer() { return *player; }
 		const std::vector<Entity*>& GetEntities() { return entities; }
 		Surface* GetScreen() { return screen; }
 
@@ -37,6 +37,8 @@ namespace Tmpl8 {
 		void MouseMove(int x, int y);
 		void KeyUp(SDL_Scancode key);
 		void KeyDown(SDL_Scancode key);
+
+		void CheckCollisions();
 	private:
 		Surface* screen = nullptr;
 		Surface* background = nullptr;
@@ -45,5 +47,4 @@ namespace Tmpl8 {
 
 		static Game* theGame;
 	};
-
 }; // namespace Tmpl8

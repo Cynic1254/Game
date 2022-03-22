@@ -6,6 +6,7 @@
 #include "surface.h"
 #include "BoxCollider.h"
 #include "Wrap.h"
+#include "Fysics.h"
 
 #include "settings.h"
 
@@ -55,6 +56,13 @@ namespace Tmpl8
 
 	Game::~Game() {
 		theGame = nullptr;
+
+		delete background;
+		delete player;
+		for (auto e : entities)
+		{
+			delete e;
+		}
 	}
 
 	Game& Game::Get()
@@ -71,20 +79,21 @@ namespace Tmpl8
 		player->AddComponent<RenderComponent>(new Surface("assets/ctankbase.tga"), 16);
 		player->AddComponent<Transform>(Tmpl8::vec2{ 500.0f, (screen->GetHeight() / 2.0f) - tileSize / 2.0f });
 		player->AddComponent<PlayerController>();
-		player->AddComponent<BoxCollider>(Bounds({ 0.0f, 0.0f }, { 32.0f, 32.0f }, { 10.0f, 10.0f }), CollisionType::block);
+		player->AddComponent<BoxCollider>(Bounds(*player, { 10.0f, 10.0f }, {32.0f, 32.0f }), CollisionType::block);
+		player->AddComponent<Fysics>();
 
 		Entity* border = new Entity;
 		border->AddComponent<RenderComponent>(&treeBorder, 1);
 		border->AddComponent<Transform>(Tmpl8::vec2{ 0, -tileSize });
-		border->AddComponent<BoxCollider>(Bounds({ 0.0f, 0.0f }, { (float)treeBorder.GetWidth(), (float)treeBorder.GetHeight() }), CollisionType::block);
+		border->AddComponent<BoxCollider>(Bounds(*border, { 0.0f, 0.0f }, { (float)treeBorder.GetWidth(), (float)treeBorder.GetHeight() }), CollisionType::block);
 		border->AddComponent<Wrap>();
 
 		entities.push_back(border);
 
 		Entity* border2 = new Entity;
 		border2->AddComponent<RenderComponent>(&treeBorder, 1);
-		border2->AddComponent<Transform>(Tmpl8::vec2{ rightScreenBound - treeBorder.GetWidth(), -tileSize });
-		border2->AddComponent<BoxCollider>(Bounds({ 0.0f, 0.0f }, { (float)treeBorder.GetWidth(), (float)treeBorder.GetHeight() }), CollisionType::block);
+		border2->AddComponent<Transform>(Tmpl8::vec2{ rightScreenBound, -tileSize });
+		border2->AddComponent<BoxCollider>(Bounds(*border2, { 0.0f, 0.0f }, { (float)treeBorder.GetWidth(), (float)treeBorder.GetHeight() }), CollisionType::block);
 		border2->AddComponent<Wrap>();
 
 		entities.push_back(border2);
@@ -107,11 +116,18 @@ namespace Tmpl8
 		Timer::Get().Tick();
 
 		player->Update();
-		player->Render(*screen);
 
 		for (auto e : entities)
 		{
 			e->Update();
+			e->Render(*screen);
+		}
+
+		CheckCollisions();
+
+		player->Render(*screen);
+		for (auto e : entities)
+		{
 			e->Render(*screen);
 		}
 
@@ -154,6 +170,7 @@ namespace Tmpl8
 		}
 	}
 
+
 	void Game::KeyUp(SDL_Scancode key) {
 		player->KeyUp(key);
 
@@ -163,16 +180,34 @@ namespace Tmpl8
 		}
 	}
 
+	void Game::CheckCollisions()
+	{
+		for (auto e : entities)
+		{
+			if (BoxCollider::Collides(*player, *e).first != nullptr)
+			{
+				if (BoxCollider::Collides(*player, *e).second->GetCollisionType() == CollisionType::block)
+				{
+					player->CollidesWith(*e, BoxCollider::Collides(*player, *e));
+				}
+				if (BoxCollider::Collides(*player, *e).second->GetCollisionType() == CollisionType::hurt)
+				{
+					player->Hurt();
+				}
+			}
+		}
+	}
+
 	void DrawBackground(Surface* background) {
 		Game& game = Game::Get();
 
-		float playerX = game.GetPlayer()->GetComponent<Transform>()->GetPosition().x;
+		float playerX = game.GetPlayer().GetComponent<Transform>()->GetPosition().x;
 		float playerY = (float)PlayerController::GetYMovement();
 
 		if (playerX > leftScreenBound + game.GetScreen()->GetWidth() / 2 - tileSize / 2 &&
 			playerX < rightScreenBound - game.GetScreen()->GetWidth() / 2 + tileSize / 2)
 		{
-			backgroundOffset = { (float)fmod(game.GetPlayer()->GetComponent<Transform>()->GetPosition().x, tileSize),
+			backgroundOffset = { (float)fmod(game.GetPlayer().GetComponent<Transform>()->GetPosition().x, tileSize),
 							(float)fmod(backgroundOffset.y + playerY, tileSize) };
 		}
 		else

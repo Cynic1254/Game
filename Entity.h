@@ -7,6 +7,7 @@
 #include <utility>
 
 class Component;
+class BoxCollider;
 
 namespace Tmpl8
 {
@@ -89,6 +90,10 @@ public:
     /// </summary>
     /// <param name="key"></param>
     void MouseDown(int key);
+
+    void CollidesWith(Entity& entity, std::pair<BoxCollider*, BoxCollider*> colliders);
+
+    void Hurt();
 
 protected:
 

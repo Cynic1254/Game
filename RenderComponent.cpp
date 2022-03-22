@@ -24,7 +24,7 @@ void RenderComponent::Render(Entity& entity, Tmpl8::Surface& screen)
 
 void RenderComponent::RenderAll()
 {
-    float playerXPos = Tmpl8::Game::Get().GetPlayer()->GetComponent<Transform>()->GetPosition().x;
+    float playerXPos = Tmpl8::Game::Get().GetPlayer().GetComponent<Transform>()->GetPosition().x;
     float cameraOffset;
     if (playerXPos < leftScreenBound + Tmpl8::Game::Get().GetScreen()->GetWidth() / 2 - tileSize / 2)
         cameraOffset = 0.0f;

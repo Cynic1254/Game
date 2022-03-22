@@ -6,4 +6,4 @@ constexpr float rightScreenBound = 1000;
 
 constexpr int tileSize = 32;
 
-constexpr double PlayerSpeed = 100;
+constexpr double PlayerSpeed = 60;

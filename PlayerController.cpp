@@ -22,25 +22,21 @@ void PlayerController::Update(Entity& entity)
 
     double delta = timer.ElapsedSeconds();
 
-    double x = .0;
+    double x = .0f;
 
     if (right)
         x += PlayerSpeed * delta;
     if (left)
         x -= PlayerSpeed * delta;
 
-    if (!BoxCollider::Collides(entity, Tmpl8::vec2{ 0.0f, (float)(PlayerSpeed * delta) }))
-    {
-        yMovement = PlayerSpeed * delta;
-        std::cout << "moved y" << std::endl;
-    }
-    if (!BoxCollider::Collides(entity, { (float)x, (float)(PlayerSpeed * delta) }))
-    {
-        transform->AddPosition({ (float)x, 0.0f });
-        std::cout << "moved x" << std::endl;
-    }
+    transform->AddPosition({ (float)x, 0.0f });
 
-    std::cout << BoxCollider::Collides(entity, { (float)x, (float)(PlayerSpeed * delta) }) << std::endl;
+    yMovement = 0;
+    yMovement = PlayerSpeed * delta;
+    if (invincibility > 0)
+    {
+      invincibility -= delta;
+    }
 }
 
 void PlayerController::KeyDown(Entity& entity, SDL_Scancode key)
@@ -79,4 +75,13 @@ void PlayerController::KeyUp(Entity& entity, SDL_Scancode key)
     default:
         break;
     }
+}
+
+void PlayerController::Hurt(Entity& entity)
+{
+  if (invincibility < 0)
+  {
+    --lives;
+    invincibility = 1;
+  }
 }

@@ -3,13 +3,14 @@
 //component structure copied from jeremiah
 
 #include <SDL_scancode.h>
-#include <string>
+#include <utility>
 
 namespace Tmpl8 {
     class Surface;
 }
 
 class Entity;
+class BoxCollider;
 
 class Component
 {
@@ -56,6 +57,15 @@ public:
     /// </summary>
     /// <param name="key"></param>
     virtual void MouseDown(Entity& entity, int key);
+
+    /// <summary>
+    /// entity collides with other entity
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="entity"></param>
+    virtual void CollidesWith(Entity& self, Entity& other, std::pair<BoxCollider*, BoxCollider*> colliders);
+
+    virtual void Hurt(Entity& self);
 
     virtual ~Component() = default;
 protected:
