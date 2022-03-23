@@ -91,10 +91,23 @@ public:
     /// <param name="key"></param>
     void MouseDown(int key);
 
+    /// <summary>
+    /// entity collides with blocking collision
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="colliders"></param>
     void CollidesWith(Entity& entity, std::pair<BoxCollider*, BoxCollider*> colliders);
 
+    /// <summary>
+    /// entity collides with hurting collision
+    /// </summary>
     void Hurt();
 
+    /// <summary>
+    /// activate / deactivate the entity
+    /// </summary>
+    /// <param name="state"></param>
+    void SetActive(bool state);
 protected:
 
 private:

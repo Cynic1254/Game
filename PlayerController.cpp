@@ -25,14 +25,14 @@ void PlayerController::Update(Entity& entity)
     double x = .0f;
 
     if (right)
-        x += PlayerSpeed * delta;
+        x += settings::playerSpeed * delta;
     if (left)
-        x -= PlayerSpeed * delta;
+        x -= settings::playerSpeed * delta;
 
     transform->AddPosition({ (float)x, 0.0f });
 
     yMovement = 0;
-    yMovement = PlayerSpeed * delta;
+    yMovement = settings::playerSpeed * delta;
     if (invincibility > 0)
     {
       invincibility -= delta;
@@ -82,6 +82,8 @@ void PlayerController::Hurt(Entity& entity)
   if (invincibility < 0)
   {
     --lives;
-    invincibility = 1;
+    invincibility = settings::invincibilityCooldown;
+
+    std::cout << lives << std::endl;
   }
 }

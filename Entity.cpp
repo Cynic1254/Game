@@ -17,7 +17,10 @@ void Entity::Update()
 {
   for (auto& c : components)
   {
-    c.second->Update(*this);
+    if (c.second->GetState())
+    {
+      c.second->Update(*this);
+    }
   }
 }
 
@@ -82,5 +85,13 @@ void Entity::Hurt()
   for (auto& c : components)
   {
     c.second->Hurt(*this);
+  }
+}
+
+void Entity::SetActive(bool state)
+{
+  for (auto& c : components)
+  {
+    c.second->SetActive(state);
   }
 }

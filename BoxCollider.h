@@ -8,9 +8,9 @@
 class Entity;
 
 enum class CollisionType {
-  none = (1 << 0),
-  block = (1 << 1),
-  hurt = (1 << 2)
+  none,
+  block,
+  hurt
 };
 
 struct Bounds {
@@ -36,15 +36,6 @@ public:
     type(type),
     bounds(bounds)
   {}
-
-  /// <summary>
-  /// checks collision at pos
-  /// </summary>
-  /// <param name="pos"></param>
-  /// <param name="bounds"></param>
-  /// <returns></returns>
-  static std::vector<std::pair<Entity&, int>> At(Tmpl8::vec2 pos, Bounds bounds);
-  int At(Entity& entity, Tmpl8::vec2 pos);
 
   /// <summary>
   /// checks 2 entities against eachother

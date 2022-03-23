@@ -19,6 +19,10 @@ public:
     virtual void KeyDown(Entity& entity, SDL_Scancode key) override;
     virtual void KeyUp(Entity& entity, SDL_Scancode key) override;
 
+    /// <summary>
+    /// player got hurt
+    /// </summary>
+    /// <param name="entity"></param>
     virtual void Hurt(Entity& entity) override;
 
     static double GetYMovement() { return yMovement; }

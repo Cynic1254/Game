@@ -32,6 +32,9 @@
     <ClCompile Include="Fysics.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectController.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h" />
@@ -62,6 +65,9 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Fysics.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectController.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

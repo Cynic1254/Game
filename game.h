@@ -39,6 +39,8 @@ namespace Tmpl8 {
 		void KeyDown(SDL_Scancode key);
 
 		void CheckCollisions();
+
+		bool IsDebug() { return debug; }
 	private:
 		Surface* screen = nullptr;
 		Surface* background = nullptr;
@@ -46,5 +48,7 @@ namespace Tmpl8 {
 		std::vector<Entity*> entities;
 
 		static Game* theGame;
+
+		bool debug = false;
 	};
 }; // namespace Tmpl8

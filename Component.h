@@ -16,6 +16,8 @@ class Component
 {
 public:
 
+    virtual ~Component() = default;
+
     /// <summary>
     /// update the Component
     /// </summary>
@@ -59,19 +61,30 @@ public:
     virtual void MouseDown(Entity& entity, int key);
 
     /// <summary>
-    /// entity collides with other entity
+    /// entity collides with blocking entity
     /// </summary>
     /// <param name="self"></param>
     /// <param name="entity"></param>
     virtual void CollidesWith(Entity& self, Entity& other, std::pair<BoxCollider*, BoxCollider*> colliders);
 
+    /// <summary>
+    /// entity collides with hurting entity
+    /// </summary>
+    /// <param name="self"></param>
     virtual void Hurt(Entity& self);
 
-    virtual ~Component() = default;
+    /// <summary>
+    /// activates / deactivates the component
+    /// </summary>
+    /// <param name="state"></param>
+    void SetActive(bool state) { isActive = state; }
+    bool GetState() { return isActive; }
 protected:
     /// <summary>
     /// Do not implement directly
     /// </summary>
     Component() = default;
+
+    bool isActive = true;
 private:
 };

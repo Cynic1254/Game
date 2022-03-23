@@ -34,8 +34,16 @@ public:
         sprite(surface, numFrames)
     {}
 
+    /// <summary>
+    /// queues the object for render
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="screen"></param>
     void Render(Entity& entity, Tmpl8::Surface& screen);
 
+    /// <summary>
+    /// renders the object queue
+    /// </summary>
     static void RenderAll();
 
     /// <summary>

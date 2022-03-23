@@ -1,11 +1,13 @@
 #pragma once
 #include "Component.h"
 
-class Wrap :
+class Entity;
+
+class ObjectController :
     public Component
 {
 public:
-    virtual void Update(Entity& entity) override;
+  virtual void Update(Entity& entity) override;
 protected:
 private:
 };

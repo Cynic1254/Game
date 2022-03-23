@@ -15,5 +15,5 @@ void Wrap::Update(Entity& entity)
 
     float yMovement = PlayerController::GetYMovement();
 
-    transform->SetPosition({ transform->GetPosition().x, (float)fmod(transform->GetPosition().y - yMovement, tileSize) - tileSize});
+    transform->SetPosition({ transform->GetPosition().x, (float)fmod(transform->GetPosition().y - yMovement, settings::tileSize) - settings::tileSize});
 }
