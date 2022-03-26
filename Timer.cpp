@@ -2,7 +2,7 @@
 
 using namespace std::chrono;
 
-Timer::Timer()
+Timer::Timer()  // NOLINT(cppcoreguidelines-pro-type-member-init)
 {
     Reset();
 }
@@ -16,10 +16,10 @@ Timer& Timer::Get()
 void Timer::Tick()
 {
     t1 = high_resolution_clock::now();
-    auto delta = t1 - t0;
+    const auto delta = t1 - t0;
     t0 = t1;
 
-    elapsedTime = (double)delta.count();
+    elapsedTime = static_cast<double>(delta.count());
     totalTime += elapsedTime;
 }
 

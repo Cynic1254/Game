@@ -3,7 +3,7 @@
 
 #pragma once
 
-namespace Tmpl8 {
+namespace tmpl8 {
 
 constexpr int RedMask = 0xff0000;
 constexpr int GreenMask = 0x00ff00;
@@ -44,28 +44,28 @@ public:
 	Surface( char* a_File );
 	~Surface();
 	// member data access
-	Pixel* GetBuffer() { return m_Buffer; }
+	Pixel* GetBuffer() const { return m_Buffer; }
 	void SetBuffer( Pixel* a_Buffer ) { m_Buffer = a_Buffer; }
-	int GetWidth() { return m_Width; }
-	int GetHeight() { return m_Height; }
-	int GetPitch() { return m_Pitch; }
+	int GetWidth() const { return m_Width; }
+	int GetHeight() const { return m_Height; }
+	int GetPitch() const { return m_Pitch; }
 	void SetPitch( int a_Pitch ) { m_Pitch = a_Pitch; }
 	// Special operations
 	void InitCharset();
 	void SetChar( int c, char* c1, char* c2, char* c3, char* c4, char* c5 );
 	void Centre( char* a_String, int y1, Pixel color );
 	void Print( char* a_String, int x1, int y1, Pixel color, int width = 1 );
-	void Clear( Pixel a_Color );
-	void Line( float x1, float y1, float x2, float y2, Pixel color );
-	void Plot( int x, int y, Pixel c );
+	void Clear( Pixel a_Color ) const;
+	void Line( float x1, float y1, float x2, float y2, Pixel color ) const;
+	void Plot( int x, int y, Pixel c ) const;
 	void LoadImage( char* a_File );
-	void CopyTo( Surface* a_Dst, int a_X, int a_Y );
-	void BlendCopyTo( Surface* a_Dst, int a_X, int a_Y );
-	void ScaleColor( unsigned int a_Scale );
-	void Box( int x1, int y1, int x2, int y2, Pixel color );
-	void Bar( int x1, int y1, int x2, int y2, Pixel color );
-	void Resize( Surface* a_Orig );
-	void Draw(Surface* a_Target, int a_X, int a_Y);
+	void CopyTo( Surface* a_Dst, int a_X, int a_Y ) const;
+	void BlendCopyTo( Surface* a_Dst, int a_X, int a_Y ) const;
+	void ScaleColor( unsigned int a_Scale ) const;
+	void Box( int x1, int y1, int x2, int y2, Pixel color ) const;
+	void Bar( int x1, int y1, int x2, int y2, Pixel color ) const;
+	void Resize( Surface* a_Orig ) const;
+	void Draw(Surface* a_Target, int a_X, int a_Y) const;
 private:
 	// Attributes
 	Pixel* m_Buffer{nullptr};	
@@ -101,18 +101,18 @@ public:
 	~Sprite();
 	// Methods
 	void Draw( Surface* a_Target, int a_X, int a_Y );
-	void DrawScaled( int a_X, int a_Y, int a_Width, int a_Height, Surface* a_Target );
+	void DrawScaled( int a_X, int a_Y, int a_Width, int a_Height, Surface* a_Target ) const;
 	void SetFlags( unsigned int a_Flags ) { m_Flags = a_Flags; }
 	void SetFrame( unsigned int a_Index ) { m_CurrentFrame = a_Index; }
 	unsigned int GetFlags() const { return m_Flags; }
-	int GetWidth() { return m_Width; }
-	int GetHeight() { return m_Height; }
-	Pixel* GetBuffer() { return m_Surface->GetBuffer(); }	
-	unsigned int Frames() { return m_NumFrames; }
-	Surface* GetSurface() { return m_Surface; }
+	int GetWidth() const { return m_Width; }
+	int GetHeight() const { return m_Height; }
+	Pixel* GetBuffer() const { return m_Surface->GetBuffer(); }	
+	unsigned int Frames() const { return m_NumFrames; }
+	Surface* GetSurface() const { return m_Surface; }
 private:
 	// Methods
-	void InitializeStartData();
+	void InitializeStartData() const;
 	// Attributes
 	int m_Width, m_Height, m_Pitch;
 	unsigned int m_NumFrames;          
@@ -128,10 +128,10 @@ public:
 	Font();
 	Font( char* a_File, char* a_Chars );
 	~Font();
-	void Print( Surface* a_Target, char* a_Text, int a_X, int a_Y, bool clip = false );
-	void Centre( Surface* a_Target, char* a_Text, int a_Y );
-	int Width( char* a_Text );
-	int Height() { return m_Surface->GetHeight(); }
+	void Print( Surface* a_Target, char* a_Text, int a_X, int a_Y, bool clip = false ) const;
+	void Centre( Surface* a_Target, char* a_Text, int a_Y ) const;
+	int Width( char* a_Text ) const;
+	int Height() const { return m_Surface->GetHeight(); }
 	void YClip( int y1, int y2 ) { m_CY1 = y1; m_CY2 = y2; }
 private:
 	Surface* m_Surface;

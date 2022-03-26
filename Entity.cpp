@@ -1,13 +1,12 @@
 #include "Entity.h"
-#include "Component.h"
 
-#include <iostream>
+#include "Component.h"
 
 class BoxCollider;
 
 Entity::~Entity()
 {
-  for (auto& iter : components)
+  for (const auto& iter : components)
   {
     delete iter.second;
   }
@@ -15,7 +14,7 @@ Entity::~Entity()
 
 void Entity::Update()
 {
-  for (auto& c : components)
+  for (const auto& c : components)
   {
     if (c.second->GetState())
     {
@@ -24,9 +23,9 @@ void Entity::Update()
   }
 }
 
-void Entity::Render(Tmpl8::Surface& screen)
+void Entity::Render(tmpl8::Surface& screen)
 {
-  for (auto& c : components)
+  for (const auto& c : components)
   {
     c.second->Render(*this, screen);
   }
@@ -34,7 +33,7 @@ void Entity::Render(Tmpl8::Surface& screen)
 
 void Entity::KeyUp(SDL_Scancode key)
 {
-  for (auto& c : components)
+  for (const auto& c : components)
   {
     c.second->KeyUp(*this, key);
   }
@@ -42,7 +41,7 @@ void Entity::KeyUp(SDL_Scancode key)
 
 void Entity::KeyDown(SDL_Scancode key)
 {
-  for (auto& c : components)
+  for (const auto& c : components)
   {
     c.second->KeyDown(*this, key);
   }
@@ -50,7 +49,7 @@ void Entity::KeyDown(SDL_Scancode key)
 
 void Entity::MouseMove(int x, int y)
 {
-  for (auto& c : components)
+  for (const auto& c : components)
   {
     c.second->MouseMove(*this, x, y);
   }
@@ -58,7 +57,7 @@ void Entity::MouseMove(int x, int y)
 
 void Entity::MouseUp(int key)
 {
-  for (auto& c : components)
+  for (const auto& c : components)
   {
     c.second->MouseUp(*this, key);
   }
@@ -66,7 +65,7 @@ void Entity::MouseUp(int key)
 
 void Entity::MouseDown(int key)
 {
-  for (auto& c : components)
+  for (const auto& c : components)
   {
     c.second->MouseDown(*this, key);
   }
@@ -74,7 +73,7 @@ void Entity::MouseDown(int key)
 
 void Entity::CollidesWith(Entity& entity, std::pair<BoxCollider*, BoxCollider*> colliders)
 {
-  for (auto& c : components)
+  for (const auto& c : components)
   {
     c.second->CollidesWith(*this, entity, colliders);
   }
@@ -82,15 +81,15 @@ void Entity::CollidesWith(Entity& entity, std::pair<BoxCollider*, BoxCollider*> 
 
 void Entity::Hurt()
 {
-  for (auto& c : components)
+  for (const auto& c : components)
   {
     c.second->Hurt(*this);
   }
 }
 
-void Entity::SetActive(bool state)
+void Entity::SetActive(bool state) const
 {
-  for (auto& c : components)
+  for (const auto& c : components)
   {
     c.second->SetActive(state);
   }

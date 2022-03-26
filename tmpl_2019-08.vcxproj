@@ -225,6 +225,7 @@
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Fysics.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="ObjectController.cpp" />
@@ -241,6 +242,7 @@
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityManager.h" />
     <ClInclude Include="Fysics.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="ObjectController.h" />

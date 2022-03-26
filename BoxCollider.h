@@ -1,9 +1,9 @@
 #pragma once
 
+#include <vector>
+
 #include "Component.h"
 #include "template.h"
-
-#include <vector>
 
 class Entity;
 
@@ -14,16 +14,16 @@ enum class CollisionType {
 };
 
 struct Bounds {
-  Bounds(Entity& entity, Tmpl8::vec2 offset, Tmpl8::vec2 size) :
-    entity(entity), offset(offset), size(size) {}
+  Bounds(Entity& entity, tmpl8::vec2 offset, tmpl8::vec2 size) :
+    offset(offset), size(size), entity(entity) {}
 
-  float Top();
-  float Bottom();
-  float Left();
-  float Right();
+  float Top() const;
+  float Bottom() const;
+  float Left() const;
+  float Right() const;
 
-  Tmpl8::vec2 offset;
-  Tmpl8::vec2 size;
+  tmpl8::vec2 offset;
+  tmpl8::vec2 size;
 private:
   Entity& entity;
 };
@@ -38,17 +38,17 @@ public:
   {}
 
   /// <summary>
-  /// checks 2 entities against eachother
+  /// checks 2 entities against each other
   /// </summary>
   /// <param name="entityA"></param>
   /// <param name="entityB"></param>
   /// <returns></returns>
-  static std::pair<BoxCollider*, BoxCollider*> Collides(Entity& entityA, Entity& entityB);
+  static std::pair<BoxCollider*, BoxCollider*> Collides(const Entity& entityA, const Entity& entityB);
 
-  CollisionType GetCollisionType() { return type; };
-  Bounds GetBounds() { return bounds; };
+  CollisionType GetCollisionType() const { return type; }
+  Bounds GetBounds() { return bounds; }
 
-  virtual void Render(Entity& entity, Tmpl8::Surface& screen) override;
+  virtual void Render(Entity& entity, tmpl8::Surface& screen) override;
 
 protected:
 private:

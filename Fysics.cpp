@@ -1,12 +1,10 @@
 #include "Fysics.h"
 
-#include "Entity.h"
-#include "BoxCollider.h"
-#include "Transform.h"
-
-#include <vector>
 #include <cassert>
-#include <math.h>
+
+#include "BoxCollider.h"
+#include "Entity.h"
+#include "Transform.h"
 
 void Fysics::CollidesWith(Entity& self, Entity& other, std::pair<BoxCollider*, BoxCollider*> colliders)
 {
@@ -15,12 +13,12 @@ void Fysics::CollidesWith(Entity& self, Entity& other, std::pair<BoxCollider*, B
 
   assert(transformSelf != nullptr && transformOther != nullptr);
 
-  Bounds boundsSelf = colliders.first->GetBounds();
+  const Bounds boundsSelf = colliders.first->GetBounds();
   Bounds boundsOther = colliders.second->GetBounds();
 
-  Tmpl8::vec2 delta = (transformSelf->GetPosition() + boundsSelf.offset + boundsSelf.size / 2) - (transformOther->GetPosition() + boundsOther.offset + boundsOther.size / 2);
+  const tmpl8::vec2 delta = (transformSelf->GetPosition() + boundsSelf.offset + boundsSelf.size / 2) - (transformOther->GetPosition() + boundsOther.offset + boundsOther.size / 2);
 
-  Tmpl8::vec2 absDelta = { abs(delta.x), abs(delta.y) };
+  const tmpl8::vec2 absDelta = { abs(delta.x), abs(delta.y) };
 
   if (absDelta.y < absDelta.x)
   {

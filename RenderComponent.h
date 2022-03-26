@@ -1,36 +1,36 @@
 #pragma once
+#include <map>
+
 #include "Component.h"
 #include "surface.h"
 #include "template.h"
-
-#include <map>
 
 typedef unsigned int Pixel;
 
 struct RenderObject
 {
-    RenderObject(float x, float y, Tmpl8::Sprite& sprite, Tmpl8::Surface* screen) : 
+    RenderObject(float x, float y, tmpl8::Sprite& sprite, tmpl8::Surface* screen) : 
         pos(x, y),
         sprite(sprite),
         dst(screen)
     {}
 
-    RenderObject(Tmpl8::vec2 pos, Tmpl8::Sprite& sprite, Tmpl8::Surface* screen) :
+    RenderObject(tmpl8::vec2 pos, tmpl8::Sprite& sprite, tmpl8::Surface* screen) :
         pos(pos),
         sprite(sprite),
         dst(screen)
     {}
 
-    Tmpl8::vec2 pos;
-    Tmpl8::Sprite& sprite;
-    Tmpl8::Surface* dst;
+    tmpl8::vec2 pos;
+    tmpl8::Sprite& sprite;
+    tmpl8::Surface* dst;
 };
 
 class RenderComponent :
     public Component
 {
 public:
-    RenderComponent(Tmpl8::Surface* surface, int numFrames) : 
+    RenderComponent(tmpl8::Surface* surface, int numFrames) : 
         sprite(surface, numFrames)
     {}
 
@@ -39,7 +39,7 @@ public:
     /// </summary>
     /// <param name="entity"></param>
     /// <param name="screen"></param>
-    void Render(Entity& entity, Tmpl8::Surface& screen);
+    void Render(Entity& entity, tmpl8::Surface& screen);
 
     /// <summary>
     /// renders the object queue
@@ -56,30 +56,30 @@ public:
     /// gets the width of the sprite
     /// </summary>
     /// <returns></returns>
-    int GetWidth();
+    int GetWidth() const;
 
     /// <summary>
     /// gets the height of the sprite
     /// </summary>
     /// <returns></returns>
-    int GetHeight();
+    int GetHeight() const;
 
     /// <summary>
     /// gets the buffer of the sprite surface location
     /// </summary>
     /// <returns></returns>
-    Pixel* GetBuffer();
+    Pixel* GetBuffer() const;
 
     /// <summary>
     /// gets the frames of the sprite
     /// </summary>
     /// <returns></returns>
-    unsigned int Frames();
+    unsigned int Frames() const;
 
 protected:
 
 private:
-    Tmpl8::Sprite sprite;
+    tmpl8::Sprite sprite;
 
     static std::multimap<float, RenderObject> renderQueue;
 };

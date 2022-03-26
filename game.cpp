@@ -1,25 +1,24 @@
 #include "game.h"
 
-#include "RenderComponent.h"
-#include "Transform.h"
-#include "PlayerController.h"
-#include "surface.h"
+#include <cassert>
+#include <cmath>
+#include <SDL_scancode.h>
+
 #include "BoxCollider.h"
-#include "Wrap.h"
+#include "EntityManager.h"
 #include "Fysics.h"
 #include "ObjectController.h"
-
+#include "PlayerController.h"
+#include "RenderComponent.h"
 #include "settings.h"
-
-#include <SDL_scancode.h>
-#include <cassert>
-
-#include <cmath>
+#include "surface.h"
+#include "Transform.h"
+#include "Wrap.h"
 
 
-namespace Tmpl8
+namespace tmpl8
 {
-	void DrawBackground(Surface* background);
+	void DrawBackground(const Surface* background);
 
 	Surface tileMap("assets/IceTileset.png");
 	Surface iceTile(settings::tileSize, settings::tileSize, tileMap.GetBuffer() + 2 * (tileMap.GetPitch() * settings::tileSize), tileMap.GetPitch());
@@ -42,7 +41,7 @@ namespace Tmpl8
 				iceTile.CopyTo(background, i, j);
 			}
 
-		Surface* tempTreeTile = new Surface(settings::tileSize, settings::tileSize * 2, tileMap.GetBuffer(), tileMap.GetPitch());
+    const Surface* tempTreeTile = new Surface(settings::tileSize, settings::tileSize * 2, tileMap.GetBuffer(), tileMap.GetPitch());
 		tempTreeTile->CopyTo(&treeTile, 0, 0);
 
 		treeBorder.Clear(0);
@@ -53,6 +52,8 @@ namespace Tmpl8
 		}
 
 		delete tempTreeTile;
+
+		entityManager = new EntityManager(entities);
 	}
 
 	Game::~Game() {
@@ -60,10 +61,13 @@ namespace Tmpl8
 
 		delete background;
 		delete player;
-		for (auto e : entities)
+		delete entityManager;
+
+		for (const auto e : entities)
 		{
 			delete e;
 		}
+		entities.clear();
 	}
 
 	Game& Game::Get()
@@ -78,34 +82,26 @@ namespace Tmpl8
 	void Game::Init() {
 		player = new Entity;
 		player->AddComponent<RenderComponent>(new Surface("assets/ctankbase.tga"), 16);
-		player->AddComponent<Transform>(Tmpl8::vec2{ 500.0f, (screen->GetHeight() / 2.0f) - settings::tileSize / 2.0f });
+		player->AddComponent<Transform>(tmpl8::vec2{ 500.0f, (screen->GetHeight() / 2.0f) - settings::tileSize / 2.0f });
 		player->AddComponent<PlayerController>();
 		player->AddComponent<BoxCollider>(Bounds(*player, { 10.0f, 10.0f }, {32.0f, 32.0f }), CollisionType::block);
 		player->AddComponent<Fysics>();
 
 		Entity* border = new Entity;
 		border->AddComponent<RenderComponent>(&treeBorder, 1);
-		border->AddComponent<Transform>(Tmpl8::vec2{ 0, -settings::tileSize });
-		border->AddComponent<BoxCollider>(Bounds(*border, { 0.0f, 0.0f }, { (float)treeBorder.GetWidth(), (float)treeBorder.GetHeight() }), CollisionType::block);
+		border->AddComponent<Transform>(tmpl8::vec2{ 0, -settings::tileSize });
+		border->AddComponent<BoxCollider>(Bounds(*border, { 0.0f, 0.0f }, { static_cast<float>(treeBorder.GetWidth()), static_cast<float>(treeBorder.GetHeight()) }), CollisionType::block);
 		border->AddComponent<Wrap>();
 
 		entities.push_back(border);
 
 		Entity* border2 = new Entity;
 		border2->AddComponent<RenderComponent>(&treeBorder, 1);
-		border2->AddComponent<Transform>(Tmpl8::vec2{ settings::rightScreenBound, -settings::tileSize });
-		border2->AddComponent<BoxCollider>(Bounds(*border2, { 0.0f, 0.0f }, { (float)treeBorder.GetWidth(), (float)treeBorder.GetHeight() }), CollisionType::block);
+		border2->AddComponent<Transform>(tmpl8::vec2{ settings::rightScreenBound, -settings::tileSize });
+		border2->AddComponent<BoxCollider>(Bounds(*border2, { 0.0f, 0.0f }, { static_cast<float>(treeBorder.GetWidth()), static_cast<float>(treeBorder.GetHeight()) }), CollisionType::block);
 		border2->AddComponent<Wrap>();
 
 		entities.push_back(border2);
-
-		Entity* object = new Entity;
-		object->AddComponent<RenderComponent>(&treeTile, 1);
-		object->AddComponent<Transform>(Tmpl8::vec2{ 500.0f, ScreenHeight });
-		object->AddComponent<BoxCollider>(Bounds(*object, 0.0f, { settings::tileSize, settings::tileSize * 2}), CollisionType::hurt);
-		object->AddComponent<ObjectController>();
-
-		entities.push_back(object);
 	}
 	
 	// -----------------------------------------------------------
@@ -117,7 +113,8 @@ namespace Tmpl8
 	// Main application tick function
 	// -----------------------------------------------------------
 	vec2 backgroundOffset = 0.0f;
-	void Game::Tick() {
+	void Game::Tick() const
+  {
 		assert(player->GetComponent<Transform>() != nullptr);
 
 		DrawBackground(background);
@@ -126,7 +123,7 @@ namespace Tmpl8
 
 		player->Update();
 
-		for (auto e : entities)
+		for (const auto e : entities)
 		{
 			e->Update();
 			e->Render(*screen);
@@ -135,7 +132,7 @@ namespace Tmpl8
 		CheckCollisions();
 
 		player->Render(*screen);
-		for (auto e : entities)
+		for (const auto e : entities)
 		{
 			e->Render(*screen);
 		}
@@ -143,28 +140,31 @@ namespace Tmpl8
 		RenderComponent::RenderAll();
 	}
 
-	void Game::MouseUp(int key) {
-		player->MouseUp(key);
+	void Game::MouseUp(int button) const
+  {
+		player->MouseUp(button);
 
-		for (auto e : entities)
+		for (const auto e : entities)
 		{
-			e->MouseUp(key);
+			e->MouseUp(button);
 		}
 	}
 
-	void Game::MouseDown(int key) {
-		player->MouseDown(key);
+	void Game::MouseDown(int button) const
+  {
+		player->MouseDown(button);
 
-		for (auto& e : entities)
+		for (const auto& e : entities)
 		{
-			e->MouseDown(key);
+			e->MouseDown(button);
 		}
 	}
 
-	void Game::MouseMove(int x, int y) {
+	void Game::MouseMove(int x, int y) const
+  {
 		player->MouseMove(x, y);
 
-		for (auto& e : entities)
+		for (const auto& e : entities)
 		{
 			e->MouseMove(x, y);
 		}
@@ -179,25 +179,26 @@ namespace Tmpl8
 
 		player->KeyDown(key);
 
-		for (auto& e : entities)
+		for (const auto& e : entities)
 		{
 			e->KeyDown(key);
 		}
 	}
 
 
-	void Game::KeyUp(SDL_Scancode key) {
+	void Game::KeyUp(SDL_Scancode key) const
+  {
 		player->KeyUp(key);
 
-		for (auto& e : entities)
+		for (const auto& e : entities)
 		{
 			e->KeyUp(key);
 		}
 	}
 
-	void Game::CheckCollisions()
-	{
-		for (auto e : entities)
+	void Game::CheckCollisions() const
+  {
+		for (const auto e : entities)
 		{
 			if (BoxCollider::Collides(*player, *e).first != nullptr)
 			{
@@ -213,23 +214,34 @@ namespace Tmpl8
 		}
 	}
 
-	void DrawBackground(Surface* background) {
-		Game& game = Game::Get();
+	void Game::AddObstacle(vec2 pos)
+	{
+		Entity* object = new Entity;
+		object->AddComponent<RenderComponent>(&treeTile, 1);
+		object->AddComponent<Transform>(pos);
+		object->AddComponent<BoxCollider>(Bounds(*object, 0.0f, { settings::tileSize, settings::tileSize * 2 }), CollisionType::hurt);
+		object->AddComponent<ObjectController>();
 
-		float playerX = game.GetPlayer().GetComponent<Transform>()->GetPosition().x;
-		float playerY = (float)PlayerController::GetYMovement();
+		entities.push_back(object);
+	}
+
+	void DrawBackground(const Surface* background) {
+    const Game& game = Game::Get();
+
+    const float playerX = game.GetPlayer().GetComponent<Transform>()->GetPosition().x;
+    const float playerY = static_cast<float>(PlayerController::GetYMovement());
 
 		if (playerX > settings::leftScreenBound + game.GetScreen()->GetWidth() / 2 - settings::tileSize / 2 &&
 			playerX < settings::rightScreenBound - game.GetScreen()->GetWidth() / 2 + settings::tileSize / 2)
 		{
-			backgroundOffset = { (float)fmod(game.GetPlayer().GetComponent<Transform>()->GetPosition().x, settings::tileSize),
-							(float)fmod(backgroundOffset.y + playerY, settings::tileSize) };
+			backgroundOffset = { static_cast<float>(fmod(game.GetPlayer().GetComponent<Transform>()->GetPosition().x, settings::tileSize)),
+													 static_cast<float>(fmod(backgroundOffset.y + playerY, settings::tileSize)) };
 		}
 		else
 		{
-			backgroundOffset = { backgroundOffset.x, (float)fmod(backgroundOffset.y + playerY, settings::tileSize) };
+			backgroundOffset = { backgroundOffset.x, static_cast<float>(fmod(backgroundOffset.y + playerY, settings::tileSize)) };
 		}
 
-		background->CopyTo(game.GetScreen(), (int)-(backgroundOffset.x + settings::tileSize), (int)-(backgroundOffset.y + settings::tileSize));
+		background->CopyTo(game.GetScreen(), static_cast<int>(-(backgroundOffset.x + settings::tileSize)), static_cast<int>(-(backgroundOffset.y + settings::tileSize)));
 	}
 };

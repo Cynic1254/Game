@@ -6,30 +6,31 @@ class Transform :
     public Component
 {
 public:
-    Transform() : position(0.0f) {};
-    Transform(Tmpl8::vec2 position) : 
-        position(position)
-    {};
+    Transform() : m_position(0.0f) {}
+
+    explicit Transform(const tmpl8::vec2 position) : 
+        m_position(position)
+    {}
 
     /// <summary>
     /// set the position
     /// </summary>
     /// <param name="position"></param>
-    void SetPosition(Tmpl8::vec2 position);
+    void SetPosition(tmpl8::vec2 position);
 
     /// <summary>
     /// adds the position to the current position
     /// </summary>
     /// <param name="position"></param>
-    void AddPosition(Tmpl8::vec2 position);
+    void AddPosition(tmpl8::vec2 position);
 
     /// <summary>
     /// returns the position
     /// </summary>
     /// <returns></returns>
-    Tmpl8::vec2 GetPosition();
+    tmpl8::vec2 GetPosition() const;
 
 protected:
 private:
-    Tmpl8::vec2 position;
+    tmpl8::vec2 m_position;
 };

@@ -1,18 +1,13 @@
 #include "PlayerController.h"
 
-#include "Transform.h"
-#include "Entity.h"
-#include "template.h"
-#include "BoxCollider.h"
-#include "RenderComponent.h"
-#include "game.h"
-
-#include "settings.h"
-
 #include <cassert>
-#include <vector>
 
-double PlayerController::yMovement = 0.0f;
+#include "Entity.h"
+#include "settings.h"
+#include "template.h"
+#include "Transform.h"
+
+double PlayerController::yMovement = 0.0;
 
 void PlayerController::Update(Entity& entity)
 {
@@ -20,16 +15,16 @@ void PlayerController::Update(Entity& entity)
 
     assert(transform != nullptr);
 
-    double delta = timer.ElapsedSeconds();
+    const double delta = timer.ElapsedSeconds();
 
-    double x = .0f;
+    double x = 0.0;
 
     if (right)
         x += settings::playerSpeed * delta;
     if (left)
         x -= settings::playerSpeed * delta;
 
-    transform->AddPosition({ (float)x, 0.0f });
+    transform->AddPosition({ static_cast<float>(x), 0.0f });
 
     yMovement = 0;
     yMovement = settings::playerSpeed * delta;
@@ -39,7 +34,7 @@ void PlayerController::Update(Entity& entity)
     }
 }
 
-void PlayerController::KeyDown(Entity& entity, SDL_Scancode key)
+void PlayerController::KeyDown(Entity& entity, const SDL_Scancode key)
 {
     switch (key)
     {
@@ -58,7 +53,7 @@ void PlayerController::KeyDown(Entity& entity, SDL_Scancode key)
     }
 }
 
-void PlayerController::KeyUp(Entity& entity, SDL_Scancode key)
+void PlayerController::KeyUp(Entity& entity, const SDL_Scancode key)
 {
     switch (key)
     {

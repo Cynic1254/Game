@@ -1,13 +1,14 @@
 #pragma once
 
-#include "template.h"
-#include "Entity.h"
-#include "Timer.h"
-
-#include <vector>
 #include <SDL_scancode.h>
+#include <vector>
 
-namespace Tmpl8 {
+#include "Entity.h"
+#include "template.h"
+
+class EntityManager;
+
+namespace tmpl8 {
 
 	class Surface;
 	class Game
@@ -24,24 +25,28 @@ namespace Tmpl8 {
 
 		static Game& Get();
 
-		Entity& GetPlayer() { return *player; }
+		Entity& GetPlayer() const { return *player; }
 		const std::vector<Entity*>& GetEntities() { return entities; }
-		Surface* GetScreen() { return screen; }
+		Surface* GetScreen() const { return screen; }
 
 		void SetTarget(Surface* surface) { screen = surface; }
 		void Init();
 		void Shutdown();
-		void Tick();
-		void MouseUp(int button);
-		void MouseDown(int button);
-		void MouseMove(int x, int y);
-		void KeyUp(SDL_Scancode key);
+		void Tick() const;
+		void MouseUp(int button) const;
+		void MouseDown(int button) const;
+		void MouseMove(int x, int y) const;
+		void KeyUp(SDL_Scancode key) const;
 		void KeyDown(SDL_Scancode key);
 
-		void CheckCollisions();
+		void CheckCollisions() const;
 
-		bool IsDebug() { return debug; }
+		void AddObstacle(vec2 pos);
+
+		bool IsDebug() const { return debug; }
 	private:
+		const EntityManager* entityManager{};
+
 		Surface* screen = nullptr;
 		Surface* background = nullptr;
 		Entity* player = nullptr;

@@ -1,18 +1,18 @@
 #include "Transform.h"
+
 #include "BoxCollider.h"
-#include "game.h"
 
-void Transform::SetPosition(Tmpl8::vec2 position)
+void Transform::SetPosition(const tmpl8::vec2 position)
 {
-    this->position = position;
+    this->m_position = position;
 }
 
-void Transform::AddPosition(Tmpl8::vec2 position)
+void Transform::AddPosition(const tmpl8::vec2 position)
 {
-    this->position += position;
+    this->m_position += position;
 }
 
-Tmpl8::vec2 Transform::GetPosition()
+tmpl8::vec2 Transform::GetPosition() const
 {
-    return position;
+    return m_position;
 }

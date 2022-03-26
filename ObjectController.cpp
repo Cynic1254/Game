@@ -1,13 +1,11 @@
 #include "ObjectController.h"
 
-#include "Transform.h"
-#include "PlayerController.h"
-#include "Entity.h"
-#include "game.h"
-#include "surface.h"
-#include "RenderComponent.h"
-
 #include <cassert>
+
+#include "Entity.h"
+#include "PlayerController.h"
+#include "RenderComponent.h"
+#include "Transform.h"
 
 void ObjectController::Update(Entity& entity)
 {
@@ -15,7 +13,7 @@ void ObjectController::Update(Entity& entity)
   RenderComponent* renderComponent = entity.GetComponent<RenderComponent>();
   assert(transform != nullptr && renderComponent != nullptr);
 
-  transform->AddPosition({ 0.0f, (float)-PlayerController::GetYMovement() });
+  transform->AddPosition({ 0.0f, static_cast<float>(-PlayerController::GetYMovement()) });
 
   if (transform->GetPosition().y < -renderComponent->GetHeight())
   {

@@ -1,8 +1,8 @@
 #pragma once
+#include <SDL_scancode.h>
+
 #include "Component.h"
 #include "Timer.h"
-
-#include <SDL_scancode.h>
 
 class Entity;
 

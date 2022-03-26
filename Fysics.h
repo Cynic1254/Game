@@ -1,7 +1,7 @@
 #pragma once
-#include "Component.h"
-
 #include <utility>
+
+#include "Component.h"
 
 class Fysics :
     public Component

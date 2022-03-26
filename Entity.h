@@ -1,15 +1,15 @@
 #pragma once
 
-#include <SDL_scancode.h>
-#include <unordered_map>
-#include <typeindex>
 #include <iostream>
+#include <SDL_scancode.h>
+#include <typeindex>
+#include <unordered_map>
 #include <utility>
 
 class Component;
 class BoxCollider;
 
-namespace Tmpl8
+namespace tmpl8
 {
     class Surface;
 }
@@ -30,7 +30,7 @@ public:
     /// <summary>
     /// Adds a component to the entity
     /// </summary>
-    /// <param name="component"></param>
+    /// <param name="args">The component arguments</param>
     template<typename T, typename... Args>
     void AddComponent(Args&&... args);
 
@@ -58,7 +58,7 @@ public:
     /// <summary>
     /// Render the Component
     /// </summary>
-    void Render(Tmpl8::Surface& screen);
+    void Render(tmpl8::Surface& screen);
 
     /// <summary>
     /// A key was Released
@@ -107,7 +107,7 @@ public:
     /// activate / deactivate the entity
     /// </summary>
     /// <param name="state"></param>
-    void SetActive(bool state);
+    void SetActive(bool state) const;
 protected:
 
 private:
@@ -123,7 +123,7 @@ void Entity::AddComponent(Args&&... args)
 template<typename T>
 inline T* Entity::GetComponent() const
 {
-    auto iter = components.find(typeid(T));
+  const auto iter = components.find(typeid(T));
 
     if (iter != components.end())
     {

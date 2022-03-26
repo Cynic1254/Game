@@ -8,7 +8,7 @@ void Component::Update(Entity&)
 {
 }
 
-void Component::Render(Entity&, Tmpl8::Surface&)
+void Component::Render(Entity&, tmpl8::Surface&)
 {
 }
 
