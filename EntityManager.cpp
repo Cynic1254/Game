@@ -3,21 +3,37 @@
 #include <cassert>
 
 #include "game.h"
+#include "settings.h"
+#include "template.h"
+#include "Timer.h"
 #include "Transform.h"
 
 void EntityManager::Update()
 {
+  if (!isActive)
+    return;
+
+  spawn_timer -= Timer::Get().ElapsedSeconds();
+
+  if (spawn_timer < 0.0)
+  {
+    Activate({static_cast<float>(IRand(1000)), ScreenHeight + settings::tileSize});
+
+    spawn_timer = 1.0;
+  }
 }
 
-void EntityManager::Deactivate(const std::vector<Entity*>::const_iterator& iter)
+void EntityManager::Deactivate(Entity& e)
 {
-  (*iter)->SetActive(false);
+  e.SetActive(false);
+
+  const auto iter = std::find(active.begin(), active.end(), &e);
 
   inactive.push(*iter);
   active.erase(iter);
 }
 
-void EntityManager::Activate(tmpl8::vec2 pos)
+void EntityManager::Activate(const tmpl8::vec2 pos)
 {
   if (!inactive.empty())
   {

@@ -36,6 +36,7 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h" />
@@ -72,6 +73,7 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="Menu.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="template code">

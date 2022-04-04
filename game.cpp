@@ -81,10 +81,10 @@ namespace tmpl8
 	// -----------------------------------------------------------
 	void Game::Init() {
 		player = new Entity;
-		player->AddComponent<RenderComponent>(new Surface("assets/ctankbase.tga"), 16);
-		player->AddComponent<Transform>(tmpl8::vec2{ 500.0f, (screen->GetHeight() / 2.0f) - settings::tileSize / 2.0f });
+		player->AddComponent<RenderComponent>(new Surface("assets/skier_32.png"), 6);
+		player->AddComponent<Transform>(tmpl8::vec2{ 500.0f, (static_cast<float>(screen->GetHeight()) / 2.0f) - settings::tileSize / 2.0f });
 		player->AddComponent<PlayerController>();
-		player->AddComponent<BoxCollider>(Bounds(*player, { 10.0f, 10.0f }, {32.0f, 32.0f }), CollisionType::block);
+		player->AddComponent<BoxCollider>(Bounds(*player, { 7.0f, 5.0f }, {14.0f, 26.0f }), CollisionType::block);
 		player->AddComponent<Fysics>();
 
 		Entity* border = new Entity;
@@ -113,11 +113,10 @@ namespace tmpl8
 	// Main application tick function
 	// -----------------------------------------------------------
 	vec2 backgroundOffset = 0.0f;
-	void Game::Tick() const
+	void Game::Tick()
   {
+		entityManager->Update();
 		assert(player->GetComponent<Transform>() != nullptr);
-
-		DrawBackground(background);
 
 		Timer::Get().Tick();
 
@@ -126,10 +125,11 @@ namespace tmpl8
 		for (const auto e : entities)
 		{
 			e->Update();
-			e->Render(*screen);
 		}
 
 		CheckCollisions();
+
+		DrawBackground(background);
 
 		player->Render(*screen);
 		for (const auto e : entities)
@@ -160,8 +160,10 @@ namespace tmpl8
 		}
 	}
 
-	void Game::MouseMove(int x, int y) const
+	void Game::MouseMove(int x, int y)
   {
+		mousePos = {static_cast<float>(x), static_cast<float>(y)};
+
 		player->MouseMove(x, y);
 
 		for (const auto& e : entities)
@@ -225,7 +227,18 @@ namespace tmpl8
 		entities.push_back(object);
 	}
 
-	void DrawBackground(const Surface* background) {
+  void Game::EndGame()
+  {
+		player->SetActive(false);
+    for (int i = entities.size() - 1; i >= 0; --i)
+    {
+      entities[i]->SetActive(false);
+    }
+
+		entityManager->SetActive(false);
+  }
+
+  void DrawBackground(const Surface* background) {
     const Game& game = Game::Get();
 
     const float playerX = game.GetPlayer().GetComponent<Transform>()->GetPosition().x;

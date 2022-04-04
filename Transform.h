@@ -6,10 +6,10 @@ class Transform :
     public Component
 {
 public:
-    Transform() : m_position(0.0f) {}
+    Transform() : position_(0.0f) {}
 
     explicit Transform(const tmpl8::vec2 position) : 
-        m_position(position)
+        position_(position)
     {}
 
     /// <summary>
@@ -32,5 +32,5 @@ public:
 
 protected:
 private:
-    tmpl8::vec2 m_position;
+    tmpl8::vec2 position_;
 };

@@ -228,6 +228,7 @@
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Fysics.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="ObjectController.cpp" />
     <ClCompile Include="Wrap.cpp" />
     <ClCompile Include="PlayerController.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="Fysics.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="ObjectController.h" />
     <ClInclude Include="Wrap.h" />
     <ClInclude Include="PlayerController.h" />

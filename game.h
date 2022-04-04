@@ -28,14 +28,16 @@ namespace tmpl8 {
 		Entity& GetPlayer() const { return *player; }
 		const std::vector<Entity*>& GetEntities() { return entities; }
 		Surface* GetScreen() const { return screen; }
+		EntityManager& GetEntityManager() const {return *entityManager;}
+	  tmpl8::vec2 GetMousePos() const { return mousePos; }
 
 		void SetTarget(Surface* surface) { screen = surface; }
 		void Init();
 		void Shutdown();
-		void Tick() const;
+		void Tick();
 		void MouseUp(int button) const;
 		void MouseDown(int button) const;
-		void MouseMove(int x, int y) const;
+		void MouseMove(int x, int y);
 		void KeyUp(SDL_Scancode key) const;
 		void KeyDown(SDL_Scancode key);
 
@@ -44,8 +46,10 @@ namespace tmpl8 {
 		void AddObstacle(vec2 pos);
 
 		bool IsDebug() const { return debug; }
+
+		void EndGame();
 	private:
-		const EntityManager* entityManager{};
+		EntityManager* entityManager{};
 
 		Surface* screen = nullptr;
 		Surface* background = nullptr;
@@ -55,5 +59,7 @@ namespace tmpl8 {
 		static Game* theGame;
 
 		bool debug = false;
+
+		tmpl8::vec2 mousePos;
 	};
 }; // namespace Tmpl8

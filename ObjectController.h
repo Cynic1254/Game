@@ -8,6 +8,7 @@ class ObjectController :
 {
 public:
   virtual void Update(Entity& entity) override;
+  virtual void SetActive(Entity& entity, bool state) override;
 protected:
 private:
 };

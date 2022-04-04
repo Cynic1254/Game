@@ -82,8 +82,9 @@ public:
     /// <summary>
     /// activates / deactivates the component
     /// </summary>
+    /// <param name="entity"></param>
     /// <param name="state"></param>
-    void SetActive(bool state) { isActive = state; }
+    virtual void SetActive(Entity& entity, bool state) { isActive = state; }
     bool GetState() const { return isActive; }
 protected:
     /// <summary>

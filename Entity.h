@@ -107,7 +107,7 @@ public:
     /// activate / deactivate the entity
     /// </summary>
     /// <param name="state"></param>
-    void SetActive(bool state) const;
+    void SetActive(bool state);
 protected:
 
 private:

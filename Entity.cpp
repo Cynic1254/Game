@@ -87,10 +87,10 @@ void Entity::Hurt()
   }
 }
 
-void Entity::SetActive(bool state) const
+void Entity::SetActive(bool state)
 {
-  for (const auto& c : components)
+  for (const auto& component : components)
   {
-    c.second->SetActive(state);
+    component.second->SetActive(*this, state);
   }
 }

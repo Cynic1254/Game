@@ -34,11 +34,16 @@ public:
 
   void Update();
 
-  void Deactivate(const std::vector<Entity*>::const_iterator& iter);
+  void Deactivate(Entity& e);
   void Activate(tmpl8::vec2 pos);
 
+  void SetActive(bool state) { isActive = state; }
 protected:
 private:
   std::vector<Entity*>& active;
   std::queue<Entity*> inactive;
+
+  double spawn_timer = 1.0;
+
+  bool isActive = true;
 };
