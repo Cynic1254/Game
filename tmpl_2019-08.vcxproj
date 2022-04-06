@@ -222,6 +222,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseButton.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -240,6 +241,7 @@
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseButton.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Entity.h" />

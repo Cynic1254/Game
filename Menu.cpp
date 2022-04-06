@@ -1,5 +1,6 @@
 #include "Menu.h"
 
+#include "BaseButton.h"
 #include "game.h"
 #include "surface.h"
 
@@ -8,26 +9,29 @@ void Menu::Render(tmpl8::Surface& dst) const
   menu->Clear(0x00);
   for (const auto & button : buttons)
   {
-    if(button.active)
+    if(button->IsActive())
     {
-      button.sprite->Draw(menu, static_cast<int>(button.pos.x), static_cast<int>(button.pos.y));
+      button->GetSprite()->Draw(menu, static_cast<int>(button->GetPos().x), static_cast<int>(button->GetPos().y));
     }
   }
 
-  menu->CopyTo(&dst, 0,0);
+  menu->Draw(&dst, 0,0);
 }
 
 void Menu::MouseDown(int button)
 {
-}
+  switch (button)
+  {
+  case 1:
+  case 2:
+    for (auto button : buttons)
+    {
+      if(button->IsActive() && button->MouseOnButton())
+        button->OnClick();
+    }
+    break;
 
-bool Menu::Button::Clicked(const tmpl8::vec2 clickPos) const
-{
-  if(!active)
-    return false;
-
-  const tmpl8::vec2 min = pos;
-  const tmpl8::vec2 max = pos + tmpl8::vec2{static_cast<float>(sprite->GetWidth()), static_cast<float>(sprite->GetHeight())};
-
-  return (clickPos.x > min.x && clickPos.x < max.x && clickPos.y > min.y && clickPos.y < max.y);
+  default:
+    break;
+  }
 }

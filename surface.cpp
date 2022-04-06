@@ -416,7 +416,7 @@ void Surface::Draw(Surface* a_Target, int a_X, int a_Y) const
 	}
 }
 
-void Sprite::Draw( Surface* a_Target, int a_X, int a_Y )
+void Sprite::Draw( Surface* a_Target, int a_X, int a_Y ) const
 {
 	if ((a_X < -m_Width) || (a_X > (a_Target->GetWidth() + m_Width))) return;
 	if ((a_Y < -m_Height) || (a_Y > (a_Target->GetHeight() + m_Height))) return;

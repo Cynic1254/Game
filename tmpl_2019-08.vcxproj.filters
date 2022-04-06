@@ -37,6 +37,9 @@
     </ClCompile>
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="BaseButton.cpp">
+      <Filter>buttons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h" />
@@ -74,6 +77,9 @@
     </ClInclude>
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="BaseButton.h">
+      <Filter>buttons</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="template code">
@@ -81,6 +87,9 @@
     </Filter>
     <Filter Include="Components">
       <UniqueIdentifier>{d0935996-4e4b-4fab-88ee-c85c3ae48b5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="buttons">
+      <UniqueIdentifier>{816c0238-738a-4235-a05d-2022f93dd634}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
