@@ -43,7 +43,7 @@ private:
   std::vector<Entity*>& active;
   std::queue<Entity*> inactive;
 
-  double spawn_timer = 1.0;
+  float spawn_timer = 1.0f;
 
   bool isActive = true;
 };

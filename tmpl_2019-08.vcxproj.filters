@@ -37,7 +37,19 @@
     </ClCompile>
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="BaseButton.cpp">
+    <ClCompile Include="Button.cpp">
+      <Filter>buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="Start.cpp">
+      <Filter>buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="Reset.cpp">
+      <Filter>buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="Difficulty.cpp">
+      <Filter>buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="Exit.cpp">
       <Filter>buttons</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,7 +89,19 @@
     </ClInclude>
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="BaseButton.h">
+    <ClInclude Include="Button.h">
+      <Filter>buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="Start.h">
+      <Filter>buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="Reset.h">
+      <Filter>buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="Difficulty.h">
+      <Filter>buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="Exit.h">
       <Filter>buttons</Filter>
     </ClInclude>
   </ItemGroup>

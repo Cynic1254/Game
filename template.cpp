@@ -262,6 +262,8 @@ void swap()
 
 #endif
 
+int exitapp = 0;
+
 int main( int argc, char **argv ) 
 {  
 #ifdef _MSC_VER
@@ -290,7 +292,6 @@ int main( int argc, char **argv )
 	SDL_Renderer* renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 	SDL_Texture* frameBuffer = SDL_CreateTexture( renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, ScreenWidth, ScreenHeight );
 #endif
-	int exitapp = 0;
 	game = new Game();
 	game->SetTarget( surface );
 	while (!exitapp) 
@@ -362,4 +363,9 @@ int main( int argc, char **argv )
 	game->Shutdown();
 	SDL_Quit();
 	return 0;
+}
+
+void ExitProgram()
+{
+	exitapp = 1;
 }

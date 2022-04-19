@@ -1,4 +1,4 @@
-#include "BaseButton.h"
+#include "Button.h"
 
 #include "surface.h"
 
@@ -21,5 +21,13 @@ void Button::MouseMove(int x, int y)
   {
     sprite->SetFrame(0);
     onButton = false;
+  }
+}
+
+void Button::Render(tmpl8::Surface* dst) const
+{
+  if (active)
+  {
+    sprite->Draw(dst, static_cast<int>(pos.x), static_cast<int>(pos.y));
   }
 }

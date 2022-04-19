@@ -14,6 +14,7 @@
 #include "surface.h"
 #include "Transform.h"
 #include "Wrap.h"
+#include "Start.h"
 
 
 namespace tmpl8
@@ -138,7 +139,7 @@ namespace tmpl8
 		}
 
 		RenderComponent::RenderAll();
-	}
+  }
 
 	void Game::MouseUp(int button) const
   {
@@ -170,6 +171,7 @@ namespace tmpl8
 		{
 			e->MouseMove(x, y);
 		}
+
 	}
 
 	void Game::KeyDown(SDL_Scancode key) {

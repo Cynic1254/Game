@@ -5,21 +5,21 @@
 #include "game.h"
 #include "settings.h"
 #include "template.h"
-#include "Timer.h"
 #include "Transform.h"
+#include "PlayerController.h"
 
 void EntityManager::Update()
 {
   if (!isActive)
     return;
 
-  spawn_timer -= Timer::Get().ElapsedSeconds();
+  spawn_timer -= PlayerController::GetYMovement();
 
-  if (spawn_timer < 0.0)
+  if (spawn_timer < 0.0f)
   {
-    Activate({static_cast<float>(IRand(1000)), ScreenHeight + settings::tileSize});
+    Activate({static_cast<float>(IRand(1000 - settings::tileSize *2) + settings::tileSize), ScreenHeight + settings::tileSize});
 
-    spawn_timer = 1.0;
+    spawn_timer = settings::tileSize;
   }
 }
 

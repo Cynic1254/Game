@@ -34,6 +34,8 @@ typedef __int64 int64;
 typedef unsigned __int64 uint64;
 typedef unsigned int uint;
 
+void ExitProgram();
+
 namespace tmpl8 {
 
 	template <typename T>
