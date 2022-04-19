@@ -7,7 +7,9 @@ namespace settings {
 
   constexpr int tileSize = 32;
 
-  constexpr double playerSpeed = 60;
+  constexpr double playerSpeed = 100;
 
   constexpr double invincibilityCooldown = 2;
+
+  constexpr int playerLives = 3;
 }

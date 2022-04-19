@@ -27,7 +27,7 @@ public:
   int GetState() const { return state; }
   void SetState(int state) { this->state = state; }
 
-
+  Exit* GetExitButton() const {return buttons.exit;}
 protected:
 private:
   tmpl8::Surface* menu;
@@ -38,13 +38,13 @@ private:
   {
     struct
     {
-      Start* start;
-      Reset* reset;
-      Exit* exit;
-
       Difficulty* easy;
       Difficulty* normal;
       Difficulty* hard;
+
+      Start* start;
+      Reset* reset;
+      Exit* exit;
     };
 
     Button* array[6];

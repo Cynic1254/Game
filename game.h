@@ -6,6 +6,7 @@
 #include "Entity.h"
 #include "template.h"
 
+class Menu;
 class EntityManager;
 
 namespace tmpl8
@@ -53,15 +54,20 @@ namespace tmpl8
     void StartGame(int difficulty);
     int GetDifficulty() const {return difficulty;}
 
+    Menu* GetMenu() const {return menu;}
+
   private:
     EntityManager* entityManager{};
+    Menu* menu{};
+
+    Surface* heart;
 
     Surface* screen = nullptr;
     Surface* background = nullptr;
     Entity* player = nullptr;
     std::vector<Entity*> entities;
 
-    int difficulty;
+    int difficulty = 0;
 
     static Game* theGame;
 

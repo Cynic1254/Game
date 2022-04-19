@@ -38,6 +38,8 @@ public:
   void Activate(tmpl8::vec2 pos);
 
   void SetActive(bool state) { isActive = state; }
+
+  void SetDifficulty(int difficulty) {this->difficulty = difficulty;}
 protected:
 private:
   std::vector<Entity*>& active;
@@ -45,5 +47,7 @@ private:
 
   float spawn_timer = 1.0f;
 
-  bool isActive = true;
+  bool isActive = false;
+
+  int difficulty = 1;
 };

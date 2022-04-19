@@ -11,6 +11,7 @@
 
 float PlayerController::yMovement = 0.0;
 bool PlayerController::isActive = true;
+int PlayerController::lives = settings::playerLives;
 
 void PlayerController::Update(Entity& entity)
 {
@@ -128,7 +129,7 @@ void PlayerController::Hurt(Entity& entity)
     --lives;
     invincibility = settings::invincibilityCooldown;
 
-    if (lives < 0)
+    if (lives <= 0)
     {
       tmpl8::Game::Get().EndGame();
     }
@@ -141,4 +142,10 @@ float PlayerController::GetYMovement()
     return 0.0;
 
   return yMovement;
+}
+
+void PlayerController::SetActive(Entity& entity, bool state)
+{
+  lives = settings::playerLives;
+  isActive = state;
 }

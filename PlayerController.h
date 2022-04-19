@@ -27,8 +27,9 @@ public:
   void Hurt(Entity& entity) override;
 
   static float GetYMovement();
+  static int GetLives() {return lives;}
 
-  virtual void SetActive(Entity& entity, bool state) override {isActive = state;};
+  virtual void SetActive(Entity& entity, bool state) override;
 
 protected:
 private:
@@ -40,7 +41,7 @@ private:
   bool down = false;
 
   double invincibility = 1;
-  int lives = 3;
+  static int lives;
 
   static float yMovement;
   static bool isActive;

@@ -1,5 +1,6 @@
 #include "Exit.h"
 
+#include "game.h"
 #include "Menu.h"
 #include "template.h"
 
@@ -18,6 +19,7 @@ void Exit::OnClick(Menu* menu)
     normal->SetActive(true);
     hard->SetActive(true);
 
+    tmpl8::Game::Get().EndGame();
     break;
   default:
     return;

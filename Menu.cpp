@@ -12,11 +12,15 @@ Menu::Menu() : menu(new tmpl8::Surface(ScreenWidth, ScreenHeight)) // NOLINT(cpp
   buttons.reset = new Reset();
   buttons.exit = new Exit();
 
-  buttons.easy = new Difficulty();
-  buttons.normal = new Difficulty();
-  buttons.hard = new Difficulty();
+  buttons.easy = new Difficulty(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/easy.png"), 1), {ScreenWidth / 2 - 64 - 128 - 10, ScreenHeight / 2 - 64}, 1);
+  buttons.normal = new Difficulty(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/normal.png"), 1), {ScreenWidth / 2 - 64, ScreenHeight / 2 - 64}, 2);
+  buttons.hard = new Difficulty(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/easy.png"), 1), {ScreenWidth / 2 - 64 + 128 + 10, ScreenHeight / 2 - 64}, 3);
 
   buttons.start->SetButtons(*buttons.easy, *buttons.normal, *buttons.hard);
+  buttons.easy->SetButtons(*buttons.normal, *buttons.hard, *buttons.reset);
+  buttons.normal->SetButtons(*buttons.easy, *buttons.hard, *buttons.reset);
+  buttons.hard->SetButtons(*buttons.easy, *buttons.normal, *buttons.reset);
+  buttons.exit->SetButtons(*buttons.easy, *buttons.normal, *buttons.hard);
 }
 
 Menu::~Menu()

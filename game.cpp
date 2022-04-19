@@ -7,6 +7,7 @@
 #include "BoxCollider.h"
 #include "EntityManager.h"
 #include "Fysics.h"
+#include "Menu.h"
 #include "ObjectController.h"
 #include "PlayerController.h"
 #include "RenderComponent.h"
@@ -14,7 +15,6 @@
 #include "surface.h"
 #include "Transform.h"
 #include "Wrap.h"
-#include "Start.h"
 
 
 namespace tmpl8
@@ -55,6 +55,8 @@ namespace tmpl8
 		delete tempTreeTile;
 
 		entityManager = new EntityManager(entities);
+		menu = new Menu();
+		heart = new Surface("assets/UI/heart.png");
 	}
 
 	Game::~Game() {
@@ -63,6 +65,7 @@ namespace tmpl8
 		delete background;
 		delete player;
 		delete entityManager;
+		delete menu;
 
 		for (const auto e : entities)
 		{
@@ -87,6 +90,8 @@ namespace tmpl8
 		player->AddComponent<PlayerController>();
 		player->AddComponent<BoxCollider>(Bounds(*player, { 7.0f, 5.0f }, {14.0f, 26.0f }), CollisionType::block);
 		player->AddComponent<Fysics>();
+
+		player->SetActive(false);
 
 		Entity* border = new Entity;
 		border->AddComponent<RenderComponent>(&treeBorder, 1);
@@ -116,10 +121,10 @@ namespace tmpl8
 	vec2 backgroundOffset = 0.0f;
 	void Game::Tick()
   {
+		Timer::Get().Tick();
+
 		entityManager->Update();
 		assert(player->GetComponent<Transform>() != nullptr);
-
-		Timer::Get().Tick();
 
 		player->Update();
 
@@ -139,6 +144,18 @@ namespace tmpl8
 		}
 
 		RenderComponent::RenderAll();
+
+		if(difficulty)
+		{
+			int drawstart = ScreenWidth / 2 - settings::tileSize * static_cast<float>(settings::playerLives / 2.0f);
+
+		  for (int i = 0; i < PlayerController::GetLives(); i++, drawstart += settings::tileSize)
+		  {
+		    heart->Draw(screen, drawstart, 0);
+		  }
+		}
+
+		menu->Render(*screen);
   }
 
 	void Game::MouseUp(int button) const
@@ -159,6 +176,8 @@ namespace tmpl8
 		{
 			e->MouseDown(button);
 		}
+
+		menu->MouseDown(button);
 	}
 
 	void Game::MouseMove(int x, int y)
@@ -172,6 +191,7 @@ namespace tmpl8
 			e->MouseMove(x, y);
 		}
 
+		menu->MouseMove(x, y);
 	}
 
 	void Game::KeyDown(SDL_Scancode key) {
@@ -237,7 +257,23 @@ namespace tmpl8
       entities[i]->SetActive(false);
     }
 
+		difficulty = 0;
 		entityManager->SetActive(false);
+  }
+
+  void Game::StartGame(int difficulty)
+  {
+		EndGame();
+
+		player->SetActive(true);
+    for (auto entity : entities)
+    {
+      entity->SetActive(true);
+    }
+
+		this->difficulty = difficulty;
+		entityManager->SetDifficulty(difficulty);
+		entityManager->SetActive(true);
   }
 
   void DrawBackground(const Surface* background) {

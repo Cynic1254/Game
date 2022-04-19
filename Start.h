@@ -7,7 +7,7 @@ class Start :
 {
 public:
   Start() :
-  Button(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/start.png"), 2), {ScreenWidth / 2 - 32, ScreenHeight / 2 - 16})
+  Button(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/start.png"), 2), {ScreenWidth / 2 - 32, ScreenHeight / 2 - 16}, true)
   {}
 
   virtual void OnClick(Menu* menu) override;

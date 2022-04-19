@@ -26,6 +26,9 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include "Exit.h"
+#include "Menu.h"
+
 #ifdef ADVANCEDGL
 #define GLEW_BUILD
 extern "C"
@@ -339,7 +342,7 @@ int main( int argc, char **argv )
 			case SDL_KEYDOWN:
 				if (event.key.keysym.sym == SDLK_ESCAPE) 
 				{
-					exitapp = 1;
+					game->GetMenu()->GetExitButton()->OnClick(game->GetMenu());
 				}
 				game->KeyDown( event.key.keysym.scancode );
 				break;
