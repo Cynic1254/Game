@@ -68,6 +68,7 @@ namespace tmpl8
     std::vector<Entity*> entities;
 
     int difficulty = 0;
+    bool running = false;
 
     static Game* theGame;
 

@@ -162,7 +162,7 @@ namespace tmpl8
 
     RenderComponent::RenderAll();
 
-    if (difficulty)
+    if (running)
     {
       int drawstart = static_cast<int>(ScreenWidth / 2.0f - settings::tileSize * (settings::playerLives / 2.0f));
 
@@ -274,7 +274,7 @@ namespace tmpl8
       entities[i]->SetActive(false);
     }
 
-    difficulty = 0;
+    running = false;
     entityManager->SetActive(false);
   }
 
@@ -289,6 +289,7 @@ namespace tmpl8
     }
 
     this->difficulty = difficulty;
+    running = true;
     entityManager->SetDifficulty(difficulty);
     entityManager->SetActive(true);
 

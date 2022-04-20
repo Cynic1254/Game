@@ -13,6 +13,7 @@ void Exit::OnClick(Menu* menu)
     ExitProgram();
     break;
   case 2:
+  case 3:
     menu->SetState(1);
 
     easy->SetActive(true);
