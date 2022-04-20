@@ -27,8 +27,7 @@ public:
   int GetState() const { return state; }
   void SetState(int state) { this->state = state; }
 
-  Exit* GetExitButton() const {return buttons.exit;}
-protected:
+  Exit* GetExitButton() const { return buttons.exit; }
 private:
   tmpl8::Surface* menu;
 

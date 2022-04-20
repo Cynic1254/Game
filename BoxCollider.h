@@ -48,9 +48,8 @@ public:
   CollisionType GetCollisionType() const { return type; }
   Bounds GetBounds() { return bounds; }
 
-  virtual void Render(Entity& entity, tmpl8::Surface& screen) override;
+  void Render(Entity& entity, tmpl8::Surface& screen) override;
 
-protected:
 private:
   CollisionType type = CollisionType::none;
   Bounds bounds;

@@ -22,6 +22,6 @@ void Exit::OnClick(Menu* menu)
     tmpl8::Game::Get().EndGame();
     break;
   default:
-    return;
+    break;
   }
 }

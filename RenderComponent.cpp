@@ -15,12 +15,12 @@ void RenderComponent::Render(Entity& entity, tmpl8::Surface& screen)
 {
   if (isActive)
   {
-    Transform* transform = entity.GetComponent<Transform>();
+    const Transform* transform = entity.GetComponent<Transform>();
     assert(transform != nullptr);
 
     RenderObject renderObject(transform->GetPosition(), sprite, &screen);
 
-    renderQueue.insert(std::pair<float, RenderObject>(renderObject.pos.y + sprite.GetHeight(), renderObject));
+    renderQueue.insert(std::pair<float, RenderObject>(renderObject.pos.y + static_cast<float>(sprite.GetHeight()), renderObject));
   }
 }
 
@@ -29,17 +29,17 @@ void RenderComponent::RenderAll()
   const float playerXPos = tmpl8::Game::Get().GetPlayer().GetComponent<Transform>()->GetPosition().x;
   float cameraOffset;
 
-  if (playerXPos < settings::leftScreenBound + tmpl8::Game::Get().GetScreen()->GetWidth() / 2 - settings::tileSize / 2)
+  if (playerXPos < settings::leftScreenBound + static_cast<float>(tmpl8::Game::Get().GetScreen()->GetWidth()) / 2.0f - settings::tileSize / 2.0f)
     cameraOffset = 0.0f;
-  else if (playerXPos > settings::rightScreenBound - tmpl8::Game::Get().GetScreen()->GetWidth() / 2 + settings::tileSize / 2)
-    cameraOffset = settings::rightScreenBound - tmpl8::Game::Get().GetScreen()->GetWidth() + settings::tileSize;
+  else if (playerXPos > settings::rightScreenBound - static_cast<float>(tmpl8::Game::Get().GetScreen()->GetWidth()) / 2.0f + settings::tileSize / 2.0f)
+    cameraOffset = settings::rightScreenBound - static_cast<float>(tmpl8::Game::Get().GetScreen()->GetWidth()) + settings::tileSize;
   else
-    cameraOffset = playerXPos - tmpl8::Game::Get().GetScreen()->GetWidth() / 2 + settings::tileSize / 2;
+    cameraOffset = playerXPos - static_cast<float>(tmpl8::Game::Get().GetScreen()->GetWidth()) / 2.0f + settings::tileSize / 2.0f;
 
   for (auto& r : renderQueue)
   {
     r.second.sprite.Draw(r.second.dst, static_cast<int>(r.second.pos.x - cameraOffset),
-                         static_cast<int>(r.second.pos.y));
+      static_cast<int>(r.second.pos.y));
   }
 
   renderQueue.clear();

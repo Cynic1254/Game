@@ -15,7 +15,7 @@ void ObjectController::Update(Entity& entity)
   const RenderComponent* renderComponent = entity.GetComponent<RenderComponent>();
   assert(transform != nullptr && renderComponent != nullptr);
 
-  transform->AddPosition({ 0.0f, static_cast<float>(-PlayerController::GetYMovement()) });
+  transform->AddPosition({ 0.0f, -PlayerController::GetYMovement() });
 
   if (transform->GetPosition().y < static_cast<float>(-renderComponent->GetHeight()))
   {

@@ -27,11 +27,11 @@ public:
   void Hurt(Entity& entity) override;
 
   static float GetYMovement();
-  static int GetLives() {return lives;}
+  static int GetLives() { return lives; }
+  static int GetScore() { return static_cast<int>(score); }
 
-  virtual void SetActive(Entity& entity, bool state) override;
+  void SetActive(Entity& entity, bool state) override;
 
-protected:
 private:
   Timer& timer;
 
@@ -45,4 +45,6 @@ private:
 
   static float yMovement;
   static bool isActive;
+
+  static double score;
 };

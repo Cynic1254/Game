@@ -39,8 +39,7 @@ public:
 
   void SetActive(bool state) { isActive = state; }
 
-  void SetDifficulty(int difficulty) {this->difficulty = difficulty;}
-protected:
+  void SetDifficulty(int difficulty) { this->difficulty = difficulty; }
 private:
   std::vector<Entity*>& active;
   std::queue<Entity*> inactive;

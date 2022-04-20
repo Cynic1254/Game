@@ -7,15 +7,17 @@
 #include "template.h"
 #include "Transform.h"
 #include "game.h"
+#include "Menu.h"
 #include "RenderComponent.h"
 
 float PlayerController::yMovement = 0.0;
 bool PlayerController::isActive = true;
 int PlayerController::lives = settings::playerLives;
+double PlayerController::score = 0;
 
 void PlayerController::Update(Entity& entity)
 {
-  if(!isActive)
+  if (!isActive)
     return;
 
   Transform* transform = entity.GetComponent<Transform>();
@@ -26,7 +28,6 @@ void PlayerController::Update(Entity& entity)
   const double delta = timer.ElapsedSeconds();
 
   double x = 0.0;
-  double y = 0.0;
 
   if (right)
     x += settings::playerSpeed * delta;
@@ -46,22 +47,15 @@ void PlayerController::Update(Entity& entity)
     renderComponent->SetFrame(3);
   }
 
-  transform->AddPosition({static_cast<float>(x), static_cast<float>(y)});
-
-  if (transform->GetPosition().y > ScreenHeight - settings::tileSize)
-  {
-    transform->SetPosition({transform->GetPosition().x, ScreenHeight - settings::tileSize});
-  }
-  if (transform->GetPosition().y < 0)
-  {
-    transform->SetPosition({transform->GetPosition().x, 0.0f});
-  }
+  transform->AddPosition({ static_cast<float>(x), 0.0f });
 
   yMovement = static_cast<float>(settings::playerSpeed * delta);
   if (invincibility > 0)
   {
     invincibility -= delta;
   }
+
+  score += timer.ElapsedSeconds();
 }
 
 void PlayerController::KeyDown(Entity& entity, const SDL_Scancode key)
@@ -132,13 +126,14 @@ void PlayerController::Hurt(Entity& entity)
     if (lives <= 0)
     {
       tmpl8::Game::Get().EndGame();
+      tmpl8::Game::Get().GetMenu()->SetState(3);
     }
   }
 }
 
 float PlayerController::GetYMovement()
 {
-  if(!isActive)
+  if (!isActive)
     return 0.0;
 
   return yMovement;
@@ -146,6 +141,10 @@ float PlayerController::GetYMovement()
 
 void PlayerController::SetActive(Entity& entity, bool state)
 {
-  lives = settings::playerLives;
+  if (state)
+  {
+    lives = settings::playerLives;
+    score = 0.0;
+  }
   isActive = state;
 }

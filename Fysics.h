@@ -4,7 +4,7 @@
 #include "Component.h"
 
 class Fysics :
-    public Component
+  public Component
 {
 public:
   /// <summary>
@@ -13,8 +13,5 @@ public:
   /// <param name="self"></param>
   /// <param name="other"></param>
   /// <param name="colliders"></param>
-  virtual void CollidesWith(Entity& self, Entity& other, std::pair<BoxCollider*, BoxCollider*> colliders) override;
-protected:
-private:
+  void CollidesWith(Entity& self, Entity& other, std::pair<BoxCollider*, BoxCollider*> colliders) override;
 };
-

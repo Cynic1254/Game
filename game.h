@@ -52,9 +52,9 @@ namespace tmpl8
     void EndGame();
 
     void StartGame(int difficulty);
-    int GetDifficulty() const {return difficulty;}
+    int GetDifficulty() const { return difficulty; }
 
-    Menu* GetMenu() const {return menu;}
+    Menu* GetMenu() const { return menu; }
 
   private:
     EntityManager* entityManager{};

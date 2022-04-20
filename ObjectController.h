@@ -4,12 +4,10 @@
 class Entity;
 
 class ObjectController :
-    public Component
+  public Component
 {
 public:
-  virtual void Update(Entity& entity) override;
-  virtual void SetActive(Entity& entity, bool state) override;
-protected:
-private:
+  void Update(Entity& entity) override;
+  void SetActive(Entity& entity, bool state) override;
 };
 

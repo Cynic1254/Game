@@ -7,20 +7,19 @@ namespace tmpl8
 }
 
 class Difficulty :
-    public Button
+  public Button
 {
 public:
   Difficulty(tmpl8::Sprite* sprite, tmpl8::vec2 pos, int difficulty) :
-  Button(sprite, pos),
-  difficulty(difficulty)
+    Button(sprite, pos),
+    difficulty(difficulty)
   {}
 
-  void SetButtons(Button& button1, Button& button2, Button& reset) {buttons[0] = &button1; buttons[1] = &button2; this->reset = &reset;}
+  void SetButtons(Button& button1, Button& button2, Button& reset) { buttons[0] = &button1; buttons[1] = &button2; this->reset = &reset; }
 
-  virtual void OnClick(Menu* menu) override;
-protected:
+  void OnClick(Menu* menu) override;
 private:
-  Button* buttons[2] = {nullptr, nullptr};
+  Button* buttons[2] = { nullptr, nullptr };
 
   Button* reset = nullptr;
 

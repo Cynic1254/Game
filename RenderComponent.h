@@ -39,7 +39,7 @@ public:
     /// </summary>
     /// <param name="entity"></param>
     /// <param name="screen"></param>
-    void Render(Entity& entity, tmpl8::Surface& screen);
+    void Render(Entity& entity, tmpl8::Surface& screen) override;
 
     /// <summary>
     /// renders the object queue
@@ -75,8 +75,6 @@ public:
     /// </summary>
     /// <returns></returns>
     unsigned int Frames() const;
-
-protected:
 
 private:
     tmpl8::Sprite sprite;

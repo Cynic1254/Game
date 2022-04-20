@@ -9,12 +9,12 @@
 void Fysics::CollidesWith(Entity& self, Entity& other, std::pair<BoxCollider*, BoxCollider*> colliders)
 {
   Transform* transformSelf = self.GetComponent<Transform>();
-  Transform* transformOther = other.GetComponent<Transform>();
+  const Transform* transformOther = other.GetComponent<Transform>();
 
   assert(transformSelf != nullptr && transformOther != nullptr);
 
   const Bounds boundsSelf = colliders.first->GetBounds();
-  Bounds boundsOther = colliders.second->GetBounds();
+  const Bounds boundsOther = colliders.second->GetBounds();
 
   const tmpl8::vec2 delta = (transformSelf->GetPosition() + boundsSelf.offset + boundsSelf.size / 2) - (transformOther->GetPosition() + boundsOther.offset + boundsOther.size / 2);
 
@@ -24,7 +24,7 @@ void Fysics::CollidesWith(Entity& self, Entity& other, std::pair<BoxCollider*, B
   {
     if (delta.x < 0)
     {
-      transformSelf->SetPosition({boundsOther.Left() - boundsSelf.size.x - boundsSelf.offset.x, transformSelf->GetPosition().y});
+      transformSelf->SetPosition({ boundsOther.Left() - boundsSelf.size.x - boundsSelf.offset.x, transformSelf->GetPosition().y });
     }
     else
     {
@@ -39,7 +39,7 @@ void Fysics::CollidesWith(Entity& self, Entity& other, std::pair<BoxCollider*, B
     }
     else
     {
-      transformSelf->SetPosition({ transformSelf->GetPosition().x, boundsOther.Bottom() - boundsSelf.offset.y});
+      transformSelf->SetPosition({ transformSelf->GetPosition().x, boundsOther.Bottom() - boundsSelf.offset.y });
     }
   }
 }

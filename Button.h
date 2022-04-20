@@ -32,17 +32,16 @@ public:
 
   virtual void OnClick(Menu* menu) {}
 
-	void MouseMove(int x, int y);
+  void MouseMove(int x, int y);
 
   void Render(tmpl8::Surface* dst) const;
 
   bool IsActive() const { return active; }
-  bool MouseOnButton() const {return onButton;}
-  tmpl8::vec2 GetPos() const {return pos;}
+  bool MouseOnButton() const { return onButton; }
+  tmpl8::vec2 GetPos() const { return pos; }
 
-  void SetActive(bool state) {active = state;}
+  void SetActive(bool state) { active = state; }
 
-protected:
 private:
   const tmpl8::vec2 pos;
   tmpl8::Sprite* sprite;

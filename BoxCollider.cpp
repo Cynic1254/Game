@@ -7,8 +7,8 @@
 #include "Transform.h"
 
 std::pair<BoxCollider*, BoxCollider*> BoxCollider::Collides(const Entity& entityA, const Entity& entityB) {
-  Transform* transformA = entityA.GetComponent<Transform>();
-  Transform* transformB = entityB.GetComponent<Transform>();
+  const Transform* transformA = entityA.GetComponent<Transform>();
+  const Transform* transformB = entityB.GetComponent<Transform>();
 
   assert(transformA != nullptr && transformB != nullptr);
 
@@ -16,7 +16,7 @@ std::pair<BoxCollider*, BoxCollider*> BoxCollider::Collides(const Entity& entity
   const std::vector<BoxCollider*> collidersB = entityB.GetComponents<BoxCollider>();
 
   if (collidersA.empty() || collidersB.empty())
-    return { nullptr , nullptr};
+    return { nullptr , nullptr };
 
   for (auto cA : collidersA)
   {
@@ -40,34 +40,34 @@ void BoxCollider::Render(Entity& entity, tmpl8::Surface& screen)
 {
   if (tmpl8::Game::Get().IsDebug())
   {
-    screen.Box(bounds.Left(), bounds.Top(), bounds.Right(), bounds.Bottom(), 0x0);
+    screen.Box(bounds.Left(), bounds.Top(), bounds.Right(), bounds.Bottom(), 0x0);  // NOLINT(bugprone-narrowing-conversions, clang-diagnostic-float-conversion, cppcoreguidelines-narrowing-conversions)
   }
 }
 
 float Bounds::Top() const
 {
-  Transform* transform = entity.GetComponent<Transform>();
+  const Transform* transform = entity.GetComponent<Transform>();
   assert(transform != nullptr);
   return transform->GetPosition().y + offset.y;
 }
 
 float Bounds::Bottom() const
 {
-  Transform* transform = entity.GetComponent<Transform>();
+  const Transform* transform = entity.GetComponent<Transform>();
   assert(transform != nullptr);
   return transform->GetPosition().y + offset.y + size.y;
 }
 
 float Bounds::Left() const
 {
-  Transform* transform = entity.GetComponent<Transform>();
+  const Transform* transform = entity.GetComponent<Transform>();
   assert(transform != nullptr);
   return transform->GetPosition().x + offset.x;
 }
 
 float Bounds::Right() const
 {
-  Transform* transform = entity.GetComponent<Transform>();
+  const Transform* transform = entity.GetComponent<Transform>();
   assert(transform != nullptr);
   return transform->GetPosition().x + offset.x + size.x;
 }

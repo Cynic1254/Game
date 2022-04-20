@@ -4,36 +4,33 @@
 class Timer
 {
 public:
-    /// <summary>
-    /// returns the timer object
-    /// </summary>
-    /// <returns></returns>
-    static Timer& Get();
+  /// <summary>
+  /// returns the timer object
+  /// </summary>
+  /// <returns></returns>
+  static Timer& Get();
 
-    /// <summary>
-    /// ticks the timer, should only be called by the game class
-    /// </summary>
-    void Tick();
+  /// <summary>
+  /// ticks the timer, should only be called by the game class
+  /// </summary>
+  void Tick();
 
-    /// <summary>
-    /// resets the timer
-    /// </summary>
-    void Reset();
+  /// <summary>
+  /// resets the timer
+  /// </summary>
+  void Reset();
 
-    double ElapsedMilliseconds() const;
+  double ElapsedMilliseconds() const;
 
-    double ElapsedSeconds() const;
+  double ElapsedSeconds() const;
 
-    double TotalMilliseconds() const;
+  double TotalMilliseconds() const;
 
-    double TotalSeconds() const;
-
-protected:
-
+  double TotalSeconds() const;
 private:
-    std::chrono::high_resolution_clock::time_point t0, t1;
-    double elapsedTime;
-    double totalTime;
+  std::chrono::high_resolution_clock::time_point t0, t1;
+  double elapsedTime;
+  double totalTime;
 
-    Timer();
+  Timer();
 };
