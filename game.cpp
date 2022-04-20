@@ -29,7 +29,9 @@ namespace tmpl8
 
   Game* Game::theGame = nullptr;
 
-  Game::Game()
+  Game::Game(const vec2 screenRes, bool isFullscreen) :
+    isFullscreen(isFullscreen),
+    screenRes(screenRes)
   {
     assert(theGame == nullptr);
     theGame = this;
@@ -173,6 +175,12 @@ namespace tmpl8
     }
 
     menu->Render(*screen);
+
+    if (debug)
+    {
+      screen->Line(mousePos.x, 0, mousePos.x, ScreenHeight, 0xff0000);
+      screen->Line(0, mousePos.y, ScreenWidth, mousePos.y, 0xff0000);
+    }
   }
 
   void Game::MouseUp(int button) const
@@ -199,6 +207,14 @@ namespace tmpl8
 
   void Game::MouseMove(int x, int y)
   {
+    if (isFullscreen)
+    {
+      x = static_cast<int>(static_cast<float>(x) / screenRes.x * static_cast<float>(ScreenWidth));
+      y = static_cast<int>(static_cast<float>(y) / screenRes.y * static_cast<float>(ScreenHeight));
+
+      std::cout << x << " , " << y << std::endl;
+    }
+
     mousePos = { static_cast<float>(x), static_cast<float>(y) };
 
     player->MouseMove(x, y);

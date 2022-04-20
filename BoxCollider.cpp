@@ -40,7 +40,7 @@ void BoxCollider::Render(Entity& entity, tmpl8::Surface& screen)
 {
   if (tmpl8::Game::Get().IsDebug())
   {
-    screen.Box(bounds.Left(), bounds.Top(), bounds.Right(), bounds.Bottom(), 0x0);  // NOLINT(bugprone-narrowing-conversions, clang-diagnostic-float-conversion, cppcoreguidelines-narrowing-conversions)
+    screen.Box(static_cast<int>(bounds.Left()), static_cast<int>(bounds.Top()), static_cast<int>(bounds.Right()), static_cast<int>(bounds.Bottom()), 0x0);
   }
 }
 

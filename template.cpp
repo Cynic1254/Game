@@ -10,7 +10,7 @@
 #pragma warning (disable : 4311) // pointer truncation from HANDLE to long
 #endif
 
-//#define FULLSCREEN
+#define FULLSCREEN
 //#define ADVANCEDGL
 
 #include "game.h"
@@ -266,6 +266,7 @@ void swap()
 #endif
 
 int exitapp = 0;
+bool isFullscreen = false;
 
 int main(int argc, char** argv)
 {
@@ -277,7 +278,8 @@ int main(int argc, char** argv)
   SDL_Init(SDL_INIT_VIDEO);
 #ifdef ADVANCEDGL
 #ifdef FULLSCREEN
-  window = SDL_CreateWindow(TemplateVersion, 100, 100, ScreenWidth, ScreenHeight, SDL_WINDOW_FULLSCREEN | SDL_WINDOW_OPENGL);
+  window = SDL_CreateWindow(TemplateVersion, 100, 100, ScreenWidth, ScreenHeight, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_OPENGL);
+  isFullscreen = true;
 #else
   window = SDL_CreateWindow(TemplateVersion, 100, 100, ScreenWidth, ScreenHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 #endif
@@ -286,7 +288,8 @@ int main(int argc, char** argv)
   ShowCursor(false);
 #else
 #ifdef FULLSCREEN
-  window = SDL_CreateWindow(TemplateVersion, 100, 100, ScreenWidth, ScreenHeight, SDL_WINDOW_FULLSCREEN);
+  window = SDL_CreateWindow(TemplateVersion, 100, 100, ScreenWidth, ScreenHeight, SDL_WINDOW_FULLSCREEN_DESKTOP);
+  isFullscreen = true;
 #else
   window = SDL_CreateWindow(TemplateVersion, 100, 100, ScreenWidth, ScreenHeight, SDL_WINDOW_SHOWN);
 #endif
@@ -295,8 +298,15 @@ int main(int argc, char** argv)
   SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   SDL_Texture* frameBuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, ScreenWidth, ScreenHeight);
 #endif
-  game = new Game();
+
+  SDL_DisplayMode display;
+  SDL_GetCurrentDisplayMode(0, &display);
+
+  //const vec2 screenRes = {static_cast<float>(display.w), static_cast<float>(display.h)};
+
+  game = new Game({ static_cast<float>(display.w), static_cast<float>(display.h) }, isFullscreen);
   game->SetTarget(surface);
+
   while (!exitapp)
   {
 #ifdef ADVANCEDGL
@@ -343,6 +353,15 @@ int main(int argc, char** argv)
         if (event.key.keysym.sym == SDLK_ESCAPE)
         {
           game->GetMenu()->GetExitButton()->OnClick(game->GetMenu());
+        }
+        if (event.key.keysym.sym == SDLK_F11)
+        {
+          isFullscreen = !isFullscreen;
+          game->setFullscreen(isFullscreen);
+          if (isFullscreen)
+            SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+          else
+            SDL_SetWindowFullscreen(window, 0);
         }
         game->KeyDown(event.key.keysym.scancode);
         break;

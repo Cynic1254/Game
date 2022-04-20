@@ -16,7 +16,7 @@ namespace tmpl8
   class Game
   {
   public:
-    Game();
+    Game(const vec2 screenRes, bool isFullscreen);
     ~Game();
 
     Game(const Game& copy) = delete;
@@ -56,6 +56,8 @@ namespace tmpl8
 
     Menu* GetMenu() const { return menu; }
 
+    void setFullscreen(bool Fullscreen) {isFullscreen = Fullscreen;}
+
   private:
     EntityManager* entityManager{};
     Menu* menu{};
@@ -73,7 +75,9 @@ namespace tmpl8
     static Game* theGame;
 
     bool debug = false;
+    bool isFullscreen;
 
     vec2 mousePos;
+    const vec2 screenRes;
   };
 }; // namespace Tmpl8
