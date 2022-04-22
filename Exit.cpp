@@ -26,3 +26,9 @@ void Exit::OnClick(Menu* menu)
     break;
   }
 }
+
+void Exit::ButtonDown(Menu* menu)
+{
+  OnClick(menu);
+  normal->SetFucus(true);
+}

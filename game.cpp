@@ -24,7 +24,13 @@ namespace tmpl8
   Surface tileMap("assets/IceTileset.png");
   Surface iceTile(settings::tileSize, settings::tileSize,
     tileMap.GetBuffer() + 2 * (tileMap.GetPitch() * settings::tileSize), tileMap.GetPitch());
+
   Surface treeTile(settings::tileSize, settings::tileSize * 2);
+  Surface rock(settings::tileSize, settings::tileSize);
+  Surface log(settings::tileSize, settings::tileSize);
+  Surface sign(settings::tileSize, settings::tileSize);
+
+
   Surface treeBorder(settings::tileSize, ScreenHeight + settings::tileSize * 3);
 
   Game* Game::theGame = nullptr;
@@ -45,18 +51,24 @@ namespace tmpl8
         iceTile.CopyTo(background, i, j);
       }
 
-    const Surface* tempTreeTile = new Surface(settings::tileSize, settings::tileSize * 2, tileMap.GetBuffer(),
+    const Surface tempTreeTile(settings::tileSize, settings::tileSize * 2, tileMap.GetBuffer(),
       tileMap.GetPitch());
-    tempTreeTile->CopyTo(&treeTile, 0, 0);
+    tempTreeTile.CopyTo(&treeTile, 0, 0);
 
     treeBorder.Clear(0);
 
     for (int y = 0; y < treeBorder.GetHeight(); y += 32)
     {
-      tempTreeTile->Draw(&treeBorder, 0, y);
+      tempTreeTile.Draw(&treeBorder, 0, y);
     }
 
-    delete tempTreeTile;
+    const Surface tempRockTile(settings::tileSize, settings::tileSize, tileMap.GetBuffer() + 2 * settings::tileSize + (tileMap.GetPitch() * settings::tileSize), tileMap.GetPitch());
+    const Surface tempLogTile(settings::tileSize, settings::tileSize, tileMap.GetBuffer() + 3 * settings::tileSize, tileMap.GetPitch());
+    const Surface tempSignTile(settings::tileSize, settings::tileSize, tileMap.GetBuffer() + 2 * settings::tileSize, tileMap.GetPitch());
+
+    tempRockTile.CopyTo(&rock, 0,0);
+    tempLogTile.CopyTo(&log, 0,0);
+    tempSignTile.CopyTo(&sign, 0, 0);
 
     entityManager = new EntityManager(entities);
     menu = new Menu();
@@ -181,6 +193,7 @@ namespace tmpl8
       screen->Line(mousePos.x, 0, mousePos.x, ScreenHeight, 0xff0000);
       screen->Line(0, mousePos.y, ScreenWidth, mousePos.y, 0xff0000);
     }
+
   }
 
   void Game::MouseUp(int button) const
@@ -211,8 +224,6 @@ namespace tmpl8
     {
       x = static_cast<int>(static_cast<float>(x) / screenRes.x * static_cast<float>(ScreenWidth));
       y = static_cast<int>(static_cast<float>(y) / screenRes.y * static_cast<float>(ScreenHeight));
-
-      std::cout << x << " , " << y << std::endl;
     }
 
     mousePos = { static_cast<float>(x), static_cast<float>(y) };
@@ -273,11 +284,26 @@ namespace tmpl8
 
   void Game::AddObstacle(vec2 pos)
   {
+    const int objectType = IRand(10);
+
     const auto object = new Entity;
-    object->AddComponent<RenderComponent>(&treeTile, 1);
     object->AddComponent<Transform>(pos);
-    object->AddComponent<BoxCollider>(Bounds(*object, { 7.0f,10.0f }, { 18.0f,51.0f }), CollisionType::hurt);
     object->AddComponent<ObjectController>();
+
+    switch (objectType)
+    {
+    case 2:
+      object->AddComponent<RenderComponent>(&rock, 1);
+      object->AddComponent<BoxCollider>(Bounds(*object, {8.0f, 9.0f}, {19.0f, 20.0f}), CollisionType::hurt);
+      break;
+    case 3:
+      object->AddComponent<RenderComponent>(&log, 1);
+      object->AddComponent<BoxCollider>(Bounds(*object, {3.0f, 11.0f}, {27.0f, 13.0f}), CollisionType::hurt);
+      break;
+    default:
+      object->AddComponent<RenderComponent>(&treeTile, 1);
+      object->AddComponent<BoxCollider>(Bounds(*object, { 7.0f,10.0f }, { 18.0f,51.0f }), CollisionType::hurt);
+    }
 
     entities.push_back(object);
   }
@@ -310,6 +336,35 @@ namespace tmpl8
     entityManager->SetActive(true);
 
     menu->SetState(2);
+  }
+
+  void Game::JoystickMove(Uint8 axis, Sint16 value)
+  {
+    player->JoystickMove(axis,value);
+    for (auto entity : entities)
+    {
+      entity->JoystickMove(axis, value);
+    }
+  }
+
+  void Game::ButtonDown(Uint8 button)
+  {
+    player->ButtonDown(button);
+    for (auto entity : entities)
+    {
+      entity->ButtonDown(button);
+    }
+
+    menu->ButtonDown(button);
+  }
+
+  void Game::ButtonUp(Uint8 button)
+  {
+    player->ButtonUp(button);
+    for (auto entity : entities)
+    {
+      entity->ButtonUp(button);
+    }
   }
 
   void DrawBackground(const Surface* background)

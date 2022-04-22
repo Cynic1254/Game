@@ -42,6 +42,15 @@ public:
 
   void SetActive(bool state) { active = state; }
 
+  void SetFucus(bool state) { onButton = state; }
+
+  virtual void Up();
+  virtual void Down();
+  virtual void Left();
+  virtual void Right();
+
+  virtual void ButtonDown(Menu* menu) {}
+
 private:
   const tmpl8::vec2 pos;
   tmpl8::Sprite* sprite;

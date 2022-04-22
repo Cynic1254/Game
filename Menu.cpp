@@ -1,5 +1,6 @@
 #include "Menu.h"
 
+#include "AudioPlayer.h"
 #include "Difficulty.h"
 #include "Exit.h"
 #include "PlayerController.h"
@@ -13,9 +14,9 @@ Menu::Menu() : menu(new tmpl8::Surface(ScreenWidth, ScreenHeight)) // NOLINT(cpp
   buttons.reset = new Reset();
   buttons.exit = new Exit();
 
-  buttons.easy = new Difficulty(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/easy.png"), 1), { ScreenWidth / 2.0f - 64 - 128 - 10, ScreenHeight / 2.0f - 64 }, 1);
-  buttons.normal = new Difficulty(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/normal.png"), 1), { ScreenWidth / 2.0f - 64, ScreenHeight / 2.0f - 64 }, 2);
-  buttons.hard = new Difficulty(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/hard.png"), 1), { ScreenWidth / 2.0f - 64 + 128 + 10, ScreenHeight / 2.0f - 64 }, 3);
+  buttons.easy = new Difficulty(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/easy.png"), 2), { ScreenWidth / 2.0f - 64 - 128 - 10, ScreenHeight / 2.0f - 64 }, 1);
+  buttons.normal = new Difficulty(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/normal.png"), 2), { ScreenWidth / 2.0f - 64, ScreenHeight / 2.0f - 64 }, 2);
+  buttons.hard = new Difficulty(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/hard.png"), 2), { ScreenWidth / 2.0f - 64 + 128 + 10, ScreenHeight / 2.0f - 64 }, 3);
 
   buttons.start->SetButtons(*buttons.easy, *buttons.normal, *buttons.hard);
   buttons.easy->SetButtons(*buttons.normal, *buttons.hard, *buttons.reset);
@@ -78,6 +79,91 @@ void Menu::MouseMove(int x, int y) const
   }
 }
 
+void Menu::ButtonDown(Uint8 button)
+{
+  switch (button)
+  {
+  case SDL_CONTROLLER_BUTTON_A:
+    for (const auto button1 : buttons.array)
+    {
+      if (button1->IsActive() && button1->MouseOnButton())
+      {
+        click.PlaySound();
+
+        button1->ButtonDown(this);
+      }
+    }
+    break;
+  case SDL_CONTROLLER_BUTTON_START:
+    if (state == 2)
+    {
+      buttons.reset->OnClick(this);
+    }
+    break;
+  case SDL_CONTROLLER_BUTTON_DPAD_UP:
+    if (state == 0)
+    {
+      buttons.start->Up();
+    }
+    for (const auto button : buttons.array)
+    {
+      if (button->IsActive() && button->MouseOnButton())
+      {
+        button->Up();
+        break;
+      }
+    }
+    break;
+  case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+    if (state == 0)
+    {
+      buttons.start->Down();
+    }
+
+    for (const auto button : buttons.array)
+    {
+      if (button->IsActive() && button->MouseOnButton())
+      {
+        button->Down();
+        break;
+      }
+    }
+    break;
+  case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+    if (state == 0)
+    {
+      buttons.start->Left();
+    }
+
+    for (const auto button : buttons.array)
+    {
+      if (button->IsActive() && button->MouseOnButton())
+      {
+        button->Left();
+        break;
+      }
+    }
+    break;
+  case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+    if (state == 0)
+    {
+      buttons.start->Right();
+    }
+
+    for (const auto button : buttons.array)
+    {
+      if (button->IsActive() && button->MouseOnButton())
+      {
+        button->Right();
+        break;
+      }
+    }
+    break;
+  default:
+    break;
+  }
+}
+
 
 void Menu::MouseDown(int button)
 {
@@ -88,7 +174,11 @@ void Menu::MouseDown(int button)
     for (const auto button1 : buttons.array)
     {
       if (button1->IsActive() && button1->MouseOnButton())
+      {
+        click.PlaySound();
+
         button1->OnClick(this);
+      }
     }
     break;
 

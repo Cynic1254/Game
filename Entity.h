@@ -109,6 +109,10 @@ public:
   /// <param name="state"></param>
   void SetActive(bool state);
 
+  void JoystickMove(Uint8 axis, Sint16 value);
+  void ButtonDown(Uint8 button);
+  void ButtonUp(Uint8 button);
+
 private:
   std::unordered_multimap<std::type_index, Component*> components;
 };

@@ -10,19 +10,20 @@
 #pragma warning (disable : 4311) // pointer truncation from HANDLE to long
 #endif
 
-#define FULLSCREEN
+//#define FULLSCREEN
 //#define ADVANCEDGL
 
-#include "game.h"
+#include "template.h"
 
+#include <corecrt_math.h>
+#include <cstdio>
 #include <fcntl.h>
 #include <io.h>
-#include "template.h"
-#include <corecrt_math.h>
-#include <SDL.h>
-#include "surface.h"
-#include <cstdio>
 #include <iostream>
+#include <SDL.h>
+
+#include "game.h"
+#include "surface.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
@@ -275,17 +276,20 @@ int main(int argc, char** argv)
     return 1;
 #endif
   printf("application started.\n");
-  SDL_Init(SDL_INIT_VIDEO);
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) < 0)
+  {
+    fprintf(stderr, "Couldn't initialize SDL: %s\n", SDL_GetError());
+    exitapp = 1;
+  }
 #ifdef ADVANCEDGL
 #ifdef FULLSCREEN
-  window = SDL_CreateWindow(TemplateVersion, 100, 100, ScreenWidth, ScreenHeight, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_OPENGL);
+  window = SDL_CreateWindow(TemplateVersion, 100, 100, ScreenWidth, ScreenHeight, SDL_WINDOW_FULLSCREEN | SDL_WINDOW_OPENGL);
   isFullscreen = true;
 #else
   window = SDL_CreateWindow(TemplateVersion, 100, 100, ScreenWidth, ScreenHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 #endif
   SDL_GLContext glContext = SDL_GL_CreateContext(window);
   init();
-  ShowCursor(false);
 #else
 #ifdef FULLSCREEN
   window = SDL_CreateWindow(TemplateVersion, 100, 100, ScreenWidth, ScreenHeight, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -306,6 +310,18 @@ int main(int argc, char** argv)
 
   game = new Game({ static_cast<float>(display.w), static_cast<float>(display.h) }, isFullscreen);
   game->SetTarget(surface);
+
+  SDL_GameController* gameController = NULL;
+  for (int i = 0; i < SDL_NumJoysticks(); ++i) {
+    if (SDL_IsGameController(i)) {
+      gameController = SDL_GameControllerOpen(i);
+      if (gameController)
+      {
+        break;
+      }
+      fprintf(stderr, "Could not open gamecontroller %i: %s\n", i, SDL_GetError());
+    }
+  }
 
   while (!exitapp)
   {
@@ -357,9 +373,15 @@ int main(int argc, char** argv)
         if (event.key.keysym.sym == SDLK_F11)
         {
           isFullscreen = !isFullscreen;
+#ifndef ADVANCEDGL
           game->setFullscreen(isFullscreen);
+#endif
           if (isFullscreen)
+#ifndef ADVANCEDGL
             SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+#else
+            SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+#endif
           else
             SDL_SetWindowFullscreen(window, 0);
         }
@@ -377,12 +399,29 @@ int main(int argc, char** argv)
       case SDL_MOUSEBUTTONDOWN:
         game->MouseDown(event.button.button);
         break;
+      case SDL_CONTROLLERAXISMOTION:
+        if (event.caxis.value < -3200 || event.caxis.value > 3200)
+          game->JoystickMove(event.caxis.axis, event.caxis.value);
+        else
+          game->JoystickMove(event.caxis.axis, 0.0);
+        break;
+      case SDL_CONTROLLERBUTTONDOWN:
+        if(event.cbutton.button == SDL_CONTROLLER_BUTTON_B || event.cbutton.button == SDL_CONTROLLER_BUTTON_BACK)
+        {
+          game->GetMenu()->GetExitButton()->ButtonDown(game->GetMenu());
+        }
+        game->ButtonDown(event.cbutton.button);
+        break;
+      case SDL_CONTROLLERBUTTONUP:
+        game->ButtonUp(event.cbutton.button);
+        break;
       default:
         break;
       }
     }
   }
   game->Shutdown();
+  SDL_GameControllerClose(gameController);
   SDL_Quit();
   return 0;
 }

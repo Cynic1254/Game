@@ -4,16 +4,14 @@
 #include "Component.h"
 #include "Timer.h"
 
+class AudioPlayer;
 class Entity;
 
 class PlayerController :
   public Component
 {
 public:
-  PlayerController() :
-    timer(Timer::Get())
-  {
-  }
+  PlayerController();
 
   void Update(Entity& entity) override;
 
@@ -32,6 +30,7 @@ public:
 
   void SetActive(Entity& entity, bool state) override;
 
+  void JoystickMove(Uint8 axis, Sint16 value) override;
 private:
   Timer& timer;
 
@@ -47,4 +46,9 @@ private:
   static bool isActive;
 
   static double score;
+
+  double controllerAxis = 0.0;
+
+  AudioPlayer* hurt{};
+  AudioPlayer* death{};
 };

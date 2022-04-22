@@ -86,6 +86,10 @@ public:
   /// <param name="state"></param>
   virtual void SetActive(Entity& entity, bool state) { isActive = state; }
   bool GetState() const { return isActive; }
+
+  virtual void JoystickMove(Uint8 axis, Sint16 value);
+  virtual void ButtonDown(Uint8 button);
+  virtual void ButtonUp(Uint8 button);
 protected:
   /// <summary>
   /// Do not implement directly

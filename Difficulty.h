@@ -18,6 +18,11 @@ public:
   void SetButtons(Button& button1, Button& button2, Button& reset) { buttons[0] = &button1; buttons[1] = &button2; this->reset = &reset; }
 
   void OnClick(Menu* menu) override;
+
+  void Left() override;
+  void Right() override;
+
+  void ButtonDown(Menu* menu) override;
 private:
   Button* buttons[2] = { nullptr, nullptr };
 

@@ -39,3 +39,15 @@ void Component::CollidesWith(Entity& self, Entity& other, std::pair<BoxCollider*
 void Component::Hurt(Entity& self)
 {
 }
+
+void Component::JoystickMove(Uint8 axis, Sint16 value)
+{
+}
+
+void Component::ButtonDown(Uint8 button)
+{
+}
+
+void Component::ButtonUp(Uint8 button)
+{
+}

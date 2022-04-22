@@ -19,6 +19,7 @@ public:
     this->hard = &hard;
   }
 
+  void ButtonDown(Menu* menu) override;
 private:
   Button* easy = nullptr;
   Button* normal = nullptr;

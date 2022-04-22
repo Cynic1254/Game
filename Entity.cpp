@@ -94,3 +94,27 @@ void Entity::SetActive(bool state)
     component.second->SetActive(*this, state);
   }
 }
+
+void Entity::JoystickMove(Uint8 axis, Sint16 value)
+{
+  for (const auto & component : components)
+  {
+    component.second->JoystickMove(axis, value);
+  }
+}
+
+void Entity::ButtonDown(Uint8 button)
+{
+  for (auto && component : components)
+  {
+    component.second->ButtonDown(button);
+  }
+}
+
+void Entity::ButtonUp(Uint8 button)
+{
+  for (auto && component : components)
+  {
+    component.second->ButtonUp(button);
+  }
+}

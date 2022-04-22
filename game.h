@@ -58,6 +58,10 @@ namespace tmpl8
 
     void setFullscreen(bool Fullscreen) {isFullscreen = Fullscreen;}
 
+    void JoystickMove(Uint8 axis, Sint16 value);
+    void ButtonDown(Uint8 button);
+    void ButtonUp(Uint8 button);
+
   private:
     EntityManager* entityManager{};
     Menu* menu{};

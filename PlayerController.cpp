@@ -15,6 +15,13 @@ bool PlayerController::isActive = true;
 int PlayerController::lives = settings::playerLives;
 double PlayerController::score = 0;
 
+PlayerController::PlayerController() :
+  timer(Timer::Get())
+{
+  hurt = new AudioPlayer("assets/sounds/minecraft oof.wav");
+  death = new AudioPlayer("assets/sounds/roblox oof.wav");
+}
+
 void PlayerController::Update(Entity& entity)
 {
   if (!isActive)
@@ -28,11 +35,17 @@ void PlayerController::Update(Entity& entity)
   const double delta = timer.ElapsedSeconds();
 
   double x = 0.0;
-
-  if (right)
-    x += settings::playerSpeed * delta;
-  if (left)
-    x -= settings::playerSpeed * delta;
+  if (controllerAxis == 0.0)
+  {
+    if (right)
+      x += settings::playerSpeed * delta;
+    if (left)
+      x -= settings::playerSpeed * delta;
+  }
+  else
+  {
+    x = controllerAxis * settings::playerSpeed * delta;
+  }
 
   if (x == 0.0)
   {
@@ -125,8 +138,13 @@ void PlayerController::Hurt(Entity& entity)
 
     if (lives <= 0)
     {
+      death->PlaySound();
       tmpl8::Game::Get().EndGame();
       tmpl8::Game::Get().GetMenu()->SetState(3);
+    }
+    else
+    {
+      hurt->PlaySound();
     }
   }
 }
@@ -147,4 +165,16 @@ void PlayerController::SetActive(Entity& entity, bool state)
     score = 0.0;
   }
   isActive = state;
+}
+
+void PlayerController::JoystickMove(Uint8 axis, Sint16 value)
+{
+  switch (axis)
+  {
+  case SDL_CONTROLLER_AXIS_LEFTX:
+    controllerAxis = value / 32767.0;
+    break;
+  default:
+    break;
+  }
 }

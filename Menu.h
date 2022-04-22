@@ -1,4 +1,5 @@
 #pragma once
+#include "AudioPlayer.h"
 
 class Exit;
 class Difficulty;
@@ -28,6 +29,9 @@ public:
   void SetState(int state) { this->state = state; }
 
   Exit* GetExitButton() const { return buttons.exit; }
+
+  void ButtonDown(Uint8 button);
+
 private:
   tmpl8::Surface* menu;
 
@@ -48,4 +52,6 @@ private:
 
     Button* array[6];
   } buttons;
+
+  AudioPlayer click{"assets/sounds/button.wav"};
 };
