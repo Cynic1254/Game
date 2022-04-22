@@ -22,7 +22,7 @@ Menu::Menu() : menu(new tmpl8::Surface(ScreenWidth, ScreenHeight)) // NOLINT(cpp
   buttons.easy->SetButtons(*buttons.normal, *buttons.hard, *buttons.reset);
   buttons.normal->SetButtons(*buttons.easy, *buttons.hard, *buttons.reset);
   buttons.hard->SetButtons(*buttons.easy, *buttons.normal, *buttons.reset);
-  buttons.exit->SetButtons(*buttons.easy, *buttons.normal, *buttons.hard);
+  buttons.exit->SetButtons(*buttons.easy, *buttons.normal, *buttons.hard, *buttons.reset);
 }
 
 Menu::~Menu()

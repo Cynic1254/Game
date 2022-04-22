@@ -20,6 +20,8 @@ void Exit::OnClick(Menu* menu)
     normal->SetActive(true);
     hard->SetActive(true);
 
+    reset->SetActive(false);
+
     tmpl8::Game::Get().EndGame();
     break;
   default:

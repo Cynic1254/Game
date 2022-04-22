@@ -12,11 +12,12 @@ public:
 
   void OnClick(Menu* menu) override;
 
-  void SetButtons(Button& easy, Button& normal, Button& hard)
+  void SetButtons(Button& easy, Button& normal, Button& hard, Button& reset)
   {
     this->easy = &easy;
     this->normal = &normal;
     this->hard = &hard;
+    this->reset = &reset;
   }
 
   void ButtonDown(Menu* menu) override;
@@ -24,5 +25,7 @@ private:
   Button* easy = nullptr;
   Button* normal = nullptr;
   Button* hard = nullptr;
+
+  Button* reset = nullptr;
 };
 
