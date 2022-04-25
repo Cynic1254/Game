@@ -6,15 +6,15 @@
 #include "Entity.h"
 #include "Transform.h"
 
-void Fysics::CollidesWith(Entity& self, Entity& other, std::pair<BoxCollider*, BoxCollider*> colliders)
+void Fysics::CollidesWith(const Entity& self, const Entity& other) const
 {
   Transform* transformSelf = self.GetComponent<Transform>();
   const Transform* transformOther = other.GetComponent<Transform>();
 
   assert(transformSelf != nullptr && transformOther != nullptr);
 
-  const Bounds boundsSelf = colliders.first->GetBounds();
-  const Bounds boundsOther = colliders.second->GetBounds();
+  const Bounds boundsSelf = self.GetComponent<BoxCollider>()->GetBounds();
+  const Bounds boundsOther = other.GetComponent<BoxCollider>()->GetBounds();
 
   const tmpl8::vec2 delta = (transformSelf->GetPosition() + boundsSelf.offset + boundsSelf.size / 2) - (transformOther->GetPosition() + boundsOther.offset + boundsOther.size / 2);
 

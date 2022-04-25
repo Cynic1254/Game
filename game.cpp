@@ -66,8 +66,8 @@ namespace tmpl8
     const Surface tempLogTile(settings::tileSize, settings::tileSize, tileMap.GetBuffer() + 3 * settings::tileSize, tileMap.GetPitch());
     const Surface tempSignTile(settings::tileSize, settings::tileSize, tileMap.GetBuffer() + 2 * settings::tileSize, tileMap.GetPitch());
 
-    tempRockTile.CopyTo(&rock, 0,0);
-    tempLogTile.CopyTo(&log, 0,0);
+    tempRockTile.CopyTo(&rock, 0, 0);
+    tempLogTile.CopyTo(&log, 0, 0);
     tempSignTile.CopyTo(&sign, 0, 0);
 
     entityManager = new EntityManager(entities);
@@ -83,6 +83,7 @@ namespace tmpl8
     delete player;
     delete entityManager;
     delete menu;
+    delete heart;
 
     for (const auto e : entities)
     {
@@ -178,7 +179,7 @@ namespace tmpl8
 
     if (running)
     {
-      int drawstart = static_cast<int>(ScreenWidth / 2.0f - settings::tileSize * (settings::playerLives / 2.0f));
+      int drawstart = static_cast<int>(static_cast<float>(screen->GetWidth()) / 2.0f - settings::tileSize * (settings::playerLives / 2.0f));
 
       for (int i = 0; i < PlayerController::GetLives(); i++, drawstart += settings::tileSize)
       {
@@ -190,8 +191,8 @@ namespace tmpl8
 
     if (debug)
     {
-      screen->Line(mousePos.x, 0, mousePos.x, ScreenHeight, 0xff0000);
-      screen->Line(0, mousePos.y, ScreenWidth, mousePos.y, 0xff0000);
+      screen->Line(mousePos.x, 0, mousePos.x, static_cast<float>(screen->GetHeight()), 0xff0000);
+      screen->Line(0, mousePos.y, static_cast<float>(screen->GetWidth()), mousePos.y, 0xff0000);
     }
 
   }
@@ -222,8 +223,8 @@ namespace tmpl8
   {
     if (isFullscreen)
     {
-      x = static_cast<int>(static_cast<float>(x) / screenRes.x * static_cast<float>(ScreenWidth));
-      y = static_cast<int>(static_cast<float>(y) / screenRes.y * static_cast<float>(ScreenHeight));
+      x = static_cast<int>(static_cast<float>(x) / screenRes.x * static_cast<float>(screen->GetWidth()));
+      y = static_cast<int>(static_cast<float>(y) / screenRes.y * static_cast<float>(screen->GetHeight()));
     }
 
     mousePos = { static_cast<float>(x), static_cast<float>(y) };
@@ -268,13 +269,14 @@ namespace tmpl8
   {
     for (const auto e : entities)
     {
-      if (BoxCollider::Collides(*player, *e).first != nullptr)
+      const CollisionType collision = BoxCollider::Collides(*player, *e);
+      if (collision != CollisionType::none)
       {
-        if (BoxCollider::Collides(*player, *e).second->GetCollisionType() == CollisionType::block)
+        if (collision == CollisionType::block)
         {
-          player->CollidesWith(*e, BoxCollider::Collides(*player, *e));
+          player->GetComponent<Fysics>()->CollidesWith(*player, *e);
         }
-        else if (BoxCollider::Collides(*player, *e).second->GetCollisionType() == CollisionType::hurt)
+        else if (collision == CollisionType::hurt)
         {
           player->Hurt();
         }
@@ -294,11 +296,11 @@ namespace tmpl8
     {
     case 2:
       object->AddComponent<RenderComponent>(&rock, 1);
-      object->AddComponent<BoxCollider>(Bounds(*object, {8.0f, 9.0f}, {19.0f, 20.0f}), CollisionType::hurt);
+      object->AddComponent<BoxCollider>(Bounds(*object, { 8.0f, 9.0f }, { 19.0f, 20.0f }), CollisionType::hurt);
       break;
     case 3:
       object->AddComponent<RenderComponent>(&log, 1);
-      object->AddComponent<BoxCollider>(Bounds(*object, {3.0f, 11.0f}, {27.0f, 13.0f}), CollisionType::hurt);
+      object->AddComponent<BoxCollider>(Bounds(*object, { 3.0f, 11.0f }, { 27.0f, 13.0f }), CollisionType::hurt);
       break;
     default:
       object->AddComponent<RenderComponent>(&treeTile, 1);
@@ -338,19 +340,19 @@ namespace tmpl8
     menu->SetState(2);
   }
 
-  void Game::JoystickMove(Uint8 axis, Sint16 value)
+  void Game::JoystickMove(Uint8 axis, Sint16 value) const
   {
-    player->JoystickMove(axis,value);
-    for (auto entity : entities)
+    player->JoystickMove(axis, value);
+    for (const auto entity : entities)
     {
       entity->JoystickMove(axis, value);
     }
   }
 
-  void Game::ButtonDown(Uint8 button)
+  void Game::ButtonDown(Uint8 button) const
   {
     player->ButtonDown(button);
-    for (auto entity : entities)
+    for (const auto entity : entities)
     {
       entity->ButtonDown(button);
     }
@@ -358,10 +360,10 @@ namespace tmpl8
     menu->ButtonDown(button);
   }
 
-  void Game::ButtonUp(Uint8 button)
+  void Game::ButtonUp(Uint8 button) const
   {
     player->ButtonUp(button);
-    for (auto entity : entities)
+    for (const auto entity : entities)
     {
       entity->ButtonUp(button);
     }

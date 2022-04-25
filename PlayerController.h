@@ -12,6 +12,7 @@ class PlayerController :
 {
 public:
   PlayerController();
+  ~PlayerController();
 
   void Update(Entity& entity) override;
 

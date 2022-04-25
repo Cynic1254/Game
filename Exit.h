@@ -1,6 +1,10 @@
 #pragma once
 #include "Button.h"
 #include "surface.h"
+#include "game.h"
+
+class Difficulty;
+class Reset;
 
 class Exit :
   public Button
@@ -10,9 +14,20 @@ public:
     Button(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/exit.png"), 2), { ScreenWidth - 64, 0 }, true)
   {}
 
+  /**
+   * \brief return to the menu if game is running and close program if on menu
+   * \param menu the menu the button is stored in
+   */
   void OnClick(Menu* menu) override;
 
-  void SetButtons(Button& easy, Button& normal, Button& hard, Button& reset)
+  /**
+   * \brief cache the buttons for use
+   * \param easy easy button
+   * \param normal normal button
+   * \param hard hard button
+   * \param reset reset button
+   */
+  void SetButtons(Difficulty& easy, Difficulty& normal, Difficulty& hard, Reset& reset)
   {
     this->easy = &easy;
     this->normal = &normal;
@@ -20,12 +35,16 @@ public:
     this->reset = &reset;
   }
 
+  /**
+   * \brief for game controllers, method gets called on button press
+   * \param menu the mnu the button is stored in
+   */
   void ButtonDown(Menu* menu) override;
 private:
-  Button* easy = nullptr;
-  Button* normal = nullptr;
-  Button* hard = nullptr;
+  Difficulty* easy = nullptr;
+  Difficulty* normal = nullptr;
+  Difficulty* hard = nullptr;
 
-  Button* reset = nullptr;
+  Reset* reset = nullptr;
 };
 

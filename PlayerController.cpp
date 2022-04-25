@@ -22,6 +22,12 @@ PlayerController::PlayerController() :
   death = new AudioPlayer("assets/sounds/roblox oof.wav");
 }
 
+PlayerController::~PlayerController()
+{
+  delete hurt;
+  delete death;
+}
+
 void PlayerController::Update(Entity& entity)
 {
   if (!isActive)

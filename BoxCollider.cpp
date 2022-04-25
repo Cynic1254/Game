@@ -6,34 +6,43 @@
 #include "surface.h"
 #include "Transform.h"
 
-std::pair<BoxCollider*, BoxCollider*> BoxCollider::Collides(const Entity& entityA, const Entity& entityB) {
-  const Transform* transformA = entityA.GetComponent<Transform>();
-  const Transform* transformB = entityB.GetComponent<Transform>();
-
-  assert(transformA != nullptr && transformB != nullptr);
+CollisionType BoxCollider::Collides(const Entity& entityA, const Entity& entityB) {
 
   const std::vector<BoxCollider*> collidersA = entityA.GetComponents<BoxCollider>();
   const std::vector<BoxCollider*> collidersB = entityB.GetComponents<BoxCollider>();
 
-  if (collidersA.empty() || collidersB.empty())
-    return { nullptr , nullptr };
+  if(collidersA.empty() || collidersB.empty())
+    return CollisionType::none;
 
-  for (auto cA : collidersA)
+  CollisionType highestCollision = CollisionType::none;
+
+  for (const auto a : collidersA)
   {
-    for (auto cB : collidersB)
+    for (const auto b : collidersB)
     {
-      const tmpl8::vec2 minA = transformA->GetPosition() + cA->bounds.offset;
-      const tmpl8::vec2 minB = transformB->GetPosition() + cB->bounds.offset;
-
-      const tmpl8::vec2 maxA = transformA->GetPosition() + cA->bounds.offset + cA->bounds.size;
-      const tmpl8::vec2 maxB = transformB->GetPosition() + cB->bounds.offset + cB->bounds.size;
-
-      if (minA.x < maxB.x && maxA.x > minB.x && minA.y < maxB.y && maxA.y > minB.y)
-        return { cA, cB };
+      if(a->CollidesWith(*b))
+      {
+        if(b->type == CollisionType::block)
+        {
+          return CollisionType::block;
+        }
+        highestCollision = CollisionType::hurt;
+      }
     }
   }
 
-  return { nullptr , nullptr };
+  return highestCollision;
+}
+
+bool BoxCollider::CollidesWith(const BoxCollider& collider) const
+{
+  const tmpl8::vec2 min1 = {bounds.Left(), bounds.Top()};
+  const tmpl8::vec2 max1 = {bounds.Right(), bounds.Bottom()};
+
+  const tmpl8::vec2 min2 = {collider.bounds.Left(), collider.bounds.Top()};
+  const tmpl8::vec2 max2 = {collider.bounds.Right(), collider.bounds.Bottom()};
+
+  return !(max1.x < min2.x || min1.x > max2.x || max1.y < min2.y || min1.y > max2.y);
 }
 
 void BoxCollider::Render(Entity& entity, tmpl8::Surface& screen)

@@ -1,5 +1,6 @@
 #include "Start.h"
 
+#include "Difficulty.h"
 #include "Menu.h"
 
 void Start::OnClick(Menu* menu)

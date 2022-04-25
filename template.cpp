@@ -403,7 +403,7 @@ int main(int argc, char** argv)
         if (event.caxis.value < -3200 || event.caxis.value > 3200)
           game->JoystickMove(event.caxis.axis, event.caxis.value);
         else
-          game->JoystickMove(event.caxis.axis, 0.0);
+          game->JoystickMove(event.caxis.axis, 0);
         break;
       case SDL_CONTROLLERBUTTONDOWN:
         if(event.cbutton.button == SDL_CONTROLLER_BUTTON_B || event.cbutton.button == SDL_CONTROLLER_BUTTON_BACK)

@@ -30,10 +30,23 @@ public:
 
   virtual ~Button();
 
+  /**
+   * \brief The method that should run when the button gets clicked
+   * \param menu the menu the button is stored in
+   */
   virtual void OnClick(Menu* menu) {}
 
+  /**
+   * \brief mouse moved
+   * \param x 
+   * \param y 
+   */
   void MouseMove(int x, int y);
 
+  /**
+   * \brief render the button
+   * \param dst destination surface
+   */
   void Render(tmpl8::Surface* dst) const;
 
   bool IsActive() const { return active; }
@@ -44,11 +57,26 @@ public:
 
   void SetFucus(bool state) { onButton = state; }
 
+  /**
+   * \brief for game controllers, method get called on d-pad press
+   */
   virtual void Up();
+  /**
+   * \brief for game controllers, method get called on d-pad press
+   */
   virtual void Down();
+  /**
+   * \brief for game controllers, method get called on d-pad press
+   */
   virtual void Left();
+  /**
+   * \brief for game controllers, method get called on d-pad press
+   */
   virtual void Right();
-
+  /**
+   * \brief for game controllers, method gets called on button press
+   * \param menu the mnu the button is stored in
+   */
   virtual void ButtonDown(Menu* menu) {}
 
 private:

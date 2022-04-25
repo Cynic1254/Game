@@ -10,6 +10,10 @@ public:
     Button(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/reset.png"), 2), 0.0f, false)
   {}
 
+  /**
+   * \brief Reset the game with the current difficulty
+   * \param menu the menu the button is stored in
+   */
   void OnClick(Menu* menu) override;
 };
 

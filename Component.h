@@ -3,7 +3,6 @@
 //component structure copied from jeremiah
 
 #include <SDL_scancode.h>
-#include <utility>
 
 namespace tmpl8 {
   class Surface;
@@ -66,14 +65,6 @@ public:
   virtual void MouseDown(Entity& entity, int key);
 
   /// <summary>
-  /// entity collides with blocking entity
-  /// </summary>
-  /// <param name="self"></param>
-  /// <param name="other"></param>
-  /// <param name="colliders"></param>
-  virtual void CollidesWith(Entity& self, Entity& other, std::pair<BoxCollider*, BoxCollider*> colliders);
-
-  /// <summary>
   /// entity collides with hurting entity
   /// </summary>
   /// <param name="self"></param>
@@ -87,8 +78,21 @@ public:
   virtual void SetActive(Entity& entity, bool state) { isActive = state; }
   bool GetState() const { return isActive; }
 
+  /**
+   * \brief joystick moves
+   * \param axis the axis that moves
+   * \param value the new value
+   */
   virtual void JoystickMove(Uint8 axis, Sint16 value);
+  /**
+   * \brief controller button pressed
+   * \param button the button that was pressed
+   */
   virtual void ButtonDown(Uint8 button);
+  /**
+   * \brief controller button released
+   * \param button the button that was released
+   */
   virtual void ButtonUp(Uint8 button);
 protected:
   /// <summary>

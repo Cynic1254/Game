@@ -16,14 +16,14 @@ namespace tmpl8
   class Game
   {
   public:
-    Game(const vec2 screenRes, bool isFullscreen);
+    Game(vec2 screenRes, bool isFullscreen);
     ~Game();
 
     Game(const Game& copy) = delete;
     Game& operator=(const Game& copy) = delete;
 
-    Game(Game&& copy) = default;
-    Game& operator=(Game&& copy) = default;
+    Game(Game&& copy) = delete;
+    Game& operator=(Game&& copy) = delete;
 
     static Game& Get();
 
@@ -58,9 +58,9 @@ namespace tmpl8
 
     void setFullscreen(bool Fullscreen) {isFullscreen = Fullscreen;}
 
-    void JoystickMove(Uint8 axis, Sint16 value);
-    void ButtonDown(Uint8 button);
-    void ButtonUp(Uint8 button);
+    void JoystickMove(Uint8 axis, Sint16 value) const;
+    void ButtonDown(Uint8 button) const;
+    void ButtonUp(Uint8 button) const;
 
   private:
     EntityManager* entityManager{};

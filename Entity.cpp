@@ -71,14 +71,6 @@ void Entity::MouseDown(int key)
   }
 }
 
-void Entity::CollidesWith(Entity& entity, std::pair<BoxCollider*, BoxCollider*> colliders)
-{
-  for (const auto& c : components)
-  {
-    c.second->CollidesWith(*this, entity, colliders);
-  }
-}
-
 void Entity::Hurt()
 {
   for (const auto& c : components)

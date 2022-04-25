@@ -7,6 +7,7 @@
 #include "template.h"
 #include "Transform.h"
 #include "PlayerController.h"
+#include "surface.h"
 
 void EntityManager::Update()
 {
@@ -18,7 +19,7 @@ void EntityManager::Update()
   if (spawn_timer < 0.0f)
   {
     for (int i = 0; i < difficulty * 2; i++)
-      Activate({ static_cast<float>(IRand(1000 - settings::tileSize * 2) + settings::tileSize), ScreenHeight + settings::tileSize });
+      Activate({ static_cast<float>(IRand(1000 - settings::tileSize * 2) + settings::tileSize), static_cast<float>(tmpl8::Game::Get().GetScreen()->GetHeight()) + settings::tileSize });
 
     spawn_timer = static_cast<float>(settings::tileSize);
   }

@@ -12,6 +12,7 @@ void Button::MouseMove(int x, int y)
   const tmpl8::vec2 min = pos;
   const tmpl8::vec2 max = min + tmpl8::vec2{ static_cast<float>(sprite->GetWidth()), static_cast<float>(sprite->GetHeight()) };
 
+  //check if mouse is on button
   if (min.x < static_cast<float>(x) && max.x > static_cast<float>(x) && min.y < static_cast<float>(y) && max.y > static_cast<float>(y))
   {
     onButton = true;

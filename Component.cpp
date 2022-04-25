@@ -1,7 +1,5 @@
 #include "Component.h"
 
-#include <utility>
-
 class BoxCollider;
 
 void Component::Update(Entity&)
@@ -29,10 +27,6 @@ void Component::MouseUp(Entity&, int)
 }
 
 void Component::MouseDown(Entity&, int)
-{
-}
-
-void Component::CollidesWith(Entity& self, Entity& other, std::pair<BoxCollider*, BoxCollider*> colliders)
 {
 }
 

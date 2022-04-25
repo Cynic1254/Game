@@ -92,13 +92,6 @@ public:
   void MouseDown(int key);
 
   /// <summary>
-  /// entity collides with blocking collision
-  /// </summary>
-  /// <param name="entity"></param>
-  /// <param name="colliders"></param>
-  void CollidesWith(Entity& entity, std::pair<BoxCollider*, BoxCollider*> colliders);
-
-  /// <summary>
   /// entity collides with hurting collision
   /// </summary>
   void Hurt();

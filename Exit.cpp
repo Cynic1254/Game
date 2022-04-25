@@ -1,7 +1,9 @@
 #include "Exit.h"
 
+#include "Difficulty.h"
 #include "game.h"
 #include "Menu.h"
+#include "Reset.h"
 #include "template.h"
 
 void Exit::OnClick(Menu* menu)

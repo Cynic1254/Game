@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vector>
-
 #include "Component.h"
 #include "template.h"
 
@@ -43,11 +41,23 @@ public:
   /// <param name="entityA"></param>
   /// <param name="entityB"></param>
   /// <returns></returns>
-  static std::pair<BoxCollider*, BoxCollider*> Collides(const Entity& entityA, const Entity& entityB);
+  static CollisionType Collides(const Entity& entityA, const Entity& entityB);
+
+  /**
+   * \brief checks if collider collides
+   * \param collider collider to check against
+   * \return 
+   */
+  bool CollidesWith(const BoxCollider& collider) const;
 
   CollisionType GetCollisionType() const { return type; }
   Bounds GetBounds() { return bounds; }
 
+  /**
+   * \brief debug function, renders colliders
+   * \param entity 
+   * \param screen 
+   */
   void Render(Entity& entity, tmpl8::Surface& screen) override;
 
 private:
