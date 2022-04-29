@@ -12,7 +12,7 @@ AudioPlayer::AudioPlayer(const char* audio)
   deviceId_ = SDL_OpenAudioDevice(NULL, 0, &audioSpec_, NULL, 0);
 }
 
-void AudioPlayer::PlaySound()
+void AudioPlayer::PlaySound() const
 {
   SDL_QueueAudio(deviceId_, audioBuffer_, audioLength_);
   SDL_PauseAudioDevice(deviceId_, 0);

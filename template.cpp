@@ -218,7 +218,13 @@ bool init()
   wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)wglGetProcAddress("wglSwapIntervalEXT");
   if ((!glGenBuffers) || (!glBindBuffer) || (!glBufferData) || (!glMapBuffer) || (!glUnmapBuffer)) return false;
   if (glGetError()) return false;
-  glViewport(0, 0, ScreenWidth, ScreenHeight);
+  int screenx, screeny;
+#ifdef FULLSCREEN
+  screenx = GetSystemMetrics(SM_CXFULLSCREEN), screeny = GetSystemMetrics(SM_CYFULLSCREEN);
+#else
+  screenx = ScreenWidth, screeny = ScreenHeight;
+#endif
+  glViewport(0, 0, screenx, screeny);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(0, 1, 0, 1, -1, 1);
@@ -283,7 +289,7 @@ int main(int argc, char** argv)
   }
 #ifdef ADVANCEDGL
 #ifdef FULLSCREEN
-  window = SDL_CreateWindow(TemplateVersion, 100, 100, ScreenWidth, ScreenHeight, SDL_WINDOW_FULLSCREEN | SDL_WINDOW_OPENGL);
+  window = SDL_CreateWindow(TemplateVersion, 100, 100, ScreenWidth, ScreenHeight, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_OPENGL);
   isFullscreen = true;
 #else
   window = SDL_CreateWindow(TemplateVersion, 100, 100, ScreenWidth, ScreenHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
@@ -373,19 +379,19 @@ int main(int argc, char** argv)
         if (event.key.keysym.sym == SDLK_F11)
         {
           isFullscreen = !isFullscreen;
-#ifndef ADVANCEDGL
           game->setFullscreen(isFullscreen);
-#endif
           if (isFullscreen)
-#ifndef ADVANCEDGL
             SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-#else
-            SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-#endif
           else
             SDL_SetWindowFullscreen(window, 0);
         }
+        /*if (event.key.keysym.sym == SDLK_SPACE)
+        {
+          while(true)
+          {}
+        }*/
         game->KeyDown(event.key.keysym.scancode);
+        game->GetMenu()->KeyDown(event.key.keysym.sym);
         break;
       case SDL_KEYUP:
         game->KeyUp(event.key.keysym.scancode);
@@ -421,6 +427,7 @@ int main(int argc, char** argv)
     }
   }
   game->Shutdown();
+  delete game;
   SDL_GameControllerClose(gameController);
   SDL_Quit();
   return 0;

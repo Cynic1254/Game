@@ -6,7 +6,7 @@ class AudioPlayer
 public:
   AudioPlayer(const char* audio);
 
-  void PlaySound();
+  void PlaySound() const;
 
   ~AudioPlayer();
 

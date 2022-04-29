@@ -236,6 +236,7 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="ObjectController.cpp" />
     <ClCompile Include="Reset.cpp" />
+    <ClCompile Include="ScoreboardManager.cpp" />
     <ClCompile Include="Start.cpp" />
     <ClCompile Include="Wrap.cpp" />
     <ClCompile Include="PlayerController.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="ObjectController.h" />
     <ClInclude Include="Reset.h" />
+    <ClInclude Include="ScoreboardManager.h" />
     <ClInclude Include="Start.h" />
     <ClInclude Include="Wrap.h" />
     <ClInclude Include="PlayerController.h" />

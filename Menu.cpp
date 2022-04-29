@@ -8,6 +8,8 @@
 #include "Start.h"
 #include "surface.h"
 
+void RenderScores(tmpl8::Surface* dst, tmpl8::vec2 pos);
+
 Menu::Menu() : menu(new tmpl8::Surface(ScreenWidth, ScreenHeight)) // NOLINT(cppcoreguidelines-pro-type-member-init)
 {
   buttons.start = new Start();
@@ -50,6 +52,7 @@ void Menu::Render(tmpl8::Surface& dst) const
   if (state == 1)
   {
     menu->Print("Select Difficulty", 150, 150, 0x010101, 5);
+    RenderScores(menu, {0.0f, ScreenHeight - 215.0f});
   }
 
   if (state == 2)
@@ -62,10 +65,13 @@ void Menu::Render(tmpl8::Surface& dst) const
 
   if (state == 3)
   {
-    char text[50];
-    sprintf(text, "Score: %i", PlayerController::GetScore());
+    std::string text = "Score: " + std::to_string(PlayerController::GetScore());
+    menu->Print(text.c_str(), 200, 200, 0x010101, 2);
 
-    menu->Print(text, 200, 200, 0x010101, 2);
+    text = "enter name: " + input;
+    menu->Print(text.c_str(), 200, 220, 0x010101, 2);
+
+    RenderScores(menu, {200.0f, 220.0f});
   }
 
   menu->Draw(&dst, 0, 0);
@@ -164,6 +170,28 @@ void Menu::ButtonDown(Uint8 button)
   }
 }
 
+void Menu::KeyDown(const SDL_Keycode key)
+{
+  if (state == 3)
+  {
+    if (key == SDLK_BACKSPACE)
+    {
+      input = "";
+    }
+    if (key >= SDLK_a && key <= SDLK_z)
+    {
+      if (input.size() < 10)
+        input += static_cast<char>(key);
+    }
+    if (key == SDLK_RETURN)
+    {
+      if (!input.empty())
+        scoreboard.AddScore(PlayerController::GetScore(), input.c_str());
+      input = "";
+      buttons.exit->OnClick(this);
+    }
+  }
+}
 
 void Menu::MouseDown(int button)
 {
@@ -185,4 +213,22 @@ void Menu::MouseDown(int button)
   default:
     break;
   }
+}
+
+void RenderScores(tmpl8::Surface* dst, tmpl8::vec2 pos)
+{
+  const std::multimap<int, std::string, std::greater<>>& scores = ScoreboardManager::GetScores();
+
+    int loops = 0;
+    for (const auto& score : scores)
+    {
+      loops++;
+      if (loops > 10)
+        break;
+
+      std::string text = std::to_string(loops) + ". " + score.second;
+      dst->Print(text.c_str(), static_cast<int>(pos.x), static_cast<int>(pos.y) + loops * 20, 0x010101, 2);
+      text = " :" + std::to_string(score.first);
+      dst->Print(text.c_str(),static_cast<int>(pos.x) + 180, static_cast<int>(pos.y) + loops * 20, 0x010101, 2);
+    }
 }

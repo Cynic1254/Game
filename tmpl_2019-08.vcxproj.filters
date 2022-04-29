@@ -53,6 +53,7 @@
       <Filter>buttons</Filter>
     </ClCompile>
     <ClCompile Include="AudioPlayer.cpp" />
+    <ClCompile Include="ScoreboardManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h" />
@@ -106,6 +107,7 @@
       <Filter>buttons</Filter>
     </ClInclude>
     <ClInclude Include="AudioPlayer.h" />
+    <ClInclude Include="ScoreboardManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="template code">

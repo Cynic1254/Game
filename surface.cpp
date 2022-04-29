@@ -97,7 +97,7 @@ namespace tmpl8 {
   }
 
   //Modified by Boyko for rescaling
-  void Surface::Print(char* a_String, int x1, int y1, Pixel color, int width)
+  void Surface::Print(const char* a_String, int x1, int y1, Pixel color, int width)
   {
     if (!fontInitialized)
     {
@@ -367,7 +367,6 @@ namespace tmpl8 {
 
   Sprite::~Sprite()
   {
-    delete m_Surface;
     for (unsigned int i = 0; i < m_NumFrames; i++) delete m_Start[i];
     delete[] m_Start;
   }

@@ -1,6 +1,10 @@
 #pragma once
 #include "AudioPlayer.h"
 
+#include <string>
+
+#include "ScoreboardManager.h"
+
 class Exit;
 class Difficulty;
 class Reset;
@@ -32,6 +36,8 @@ public:
 
   void ButtonDown(Uint8 button);
 
+  void KeyDown(SDL_Keycode key);
+
 private:
   tmpl8::Surface* menu;
 
@@ -54,4 +60,7 @@ private:
   } buttons;
 
   AudioPlayer click{"assets/sounds/button.wav"};
+
+  ScoreboardManager scoreboard;
+  std::string input;
 };
