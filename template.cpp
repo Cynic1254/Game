@@ -277,6 +277,7 @@ bool isFullscreen = false;
 
 int main(int argc, char** argv)
 {
+  srand(static_cast<int>(time(NULL)));
 #ifdef _MSC_VER
   if (!redirectIO())
     return 1;
@@ -385,11 +386,6 @@ int main(int argc, char** argv)
           else
             SDL_SetWindowFullscreen(window, 0);
         }
-        /*if (event.key.keysym.sym == SDLK_SPACE)
-        {
-          while(true)
-          {}
-        }*/
         game->KeyDown(event.key.keysym.scancode);
         game->GetMenu()->KeyDown(event.key.keysym.sym);
         break;
