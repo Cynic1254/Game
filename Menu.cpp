@@ -1,5 +1,7 @@
 #include "Menu.h"
 
+#include <algorithm>
+
 #include "AudioPlayer.h"
 #include "Difficulty.h"
 #include "Exit.h"
@@ -9,6 +11,7 @@
 #include "surface.h"
 
 void RenderScores(tmpl8::Surface* dst, tmpl8::vec2 pos);
+bool KeyHasChar(const SDL_Keycode key);
 
 Menu::Menu() : menu(new tmpl8::Surface(ScreenWidth, ScreenHeight)) // NOLINT(cppcoreguidelines-pro-type-member-init)
 {
@@ -52,7 +55,7 @@ void Menu::Render(tmpl8::Surface& dst) const
   if (state == 1)
   {
     menu->Print("Select Difficulty", 150, 150, 0x010101, 5);
-    RenderScores(menu, {0.0f, ScreenHeight - 215.0f});
+    RenderScores(menu, {250.0f, ScreenHeight - 211.0f});
   }
 
   if (state == 2)
@@ -178,7 +181,7 @@ void Menu::KeyDown(const SDL_Keycode key)
     {
       input = "";
     }
-    if (key >= SDLK_a && key <= SDLK_z)
+    if (KeyHasChar(key))
     {
       if (input.size() < 10)
         input += static_cast<char>(key);
@@ -231,4 +234,15 @@ void RenderScores(tmpl8::Surface* dst, tmpl8::vec2 pos)
       text = " :" + std::to_string(score.first);
       dst->Print(text.c_str(),static_cast<int>(pos.x) + 180, static_cast<int>(pos.y) + loops * 20, 0x010101, 2);
     }
+}
+
+bool KeyHasChar(const SDL_Keycode key)
+{
+  constexpr char c[] = "abcdefghijklmnopqrstuvwxyz0123456789!?:=,.-()#'*/";
+  for(const auto character : c)
+  {
+    if (key == character)
+      return true;
+  }
+  return false;
 }

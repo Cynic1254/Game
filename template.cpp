@@ -277,10 +277,12 @@ bool isFullscreen = false;
 
 int main(int argc, char** argv)
 {
+  SDL_SetHintWithPriority(SDL_HINT_RENDER_VSYNC, "0", SDL_HINT_OVERRIDE); 
+
   srand(static_cast<int>(time(NULL)));
 #ifdef _MSC_VER
-  if (!redirectIO())
-    return 1;
+  //if (!redirectIO())
+  //  return 1;
 #endif
   printf("application started.\n");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) < 0)

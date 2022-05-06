@@ -73,6 +73,39 @@ namespace tmpl8
     entityManager = new EntityManager(entities);
     menu = new Menu();
     heart = new Surface("assets/UI/heart.png");
+
+    player = new Entity;
+    player->AddComponent<RenderComponent>(new Surface("assets/skier_32.png"), 6);
+    player->AddComponent<Transform>(vec2{
+      500.0f, (static_cast<float>(ScreenHeight) / 2.0f) - settings::tileSize / 2.0f
+      });
+    player->AddComponent<PlayerController>();
+    player->AddComponent<BoxCollider>(Bounds(*player, { 7.0f, 5.0f }, { 14.0f, 26.0f }), CollisionType::block);
+    player->AddComponent<Fysics>();
+
+    player->SetActive(false);
+
+    const auto border = new Entity;
+    border->AddComponent<RenderComponent>(&treeBorder, 1);
+    border->AddComponent<Transform>(vec2{ 0, -settings::tileSize });
+    border->AddComponent<BoxCollider>(Bounds(*border, { 0.0f, 0.0f }, {
+                                               static_cast<float>(treeBorder.GetWidth()),
+                                               static_cast<float>(treeBorder.GetHeight())
+      }), CollisionType::block);
+    border->AddComponent<Wrap>();
+
+    entities.push_back(border);
+
+    const auto border2 = new Entity;
+    border2->AddComponent<RenderComponent>(&treeBorder, 1);
+    border2->AddComponent<Transform>(vec2{ settings::rightScreenBound, -settings::tileSize });
+    border2->AddComponent<BoxCollider>(Bounds(*border2, { 0.0f, 0.0f }, {
+                                                static_cast<float>(treeBorder.GetWidth()),
+                                                static_cast<float>(treeBorder.GetHeight())
+      }), CollisionType::block);
+    border2->AddComponent<Wrap>();
+
+    entities.push_back(border2);
   }
 
   Game::~Game()
@@ -103,38 +136,6 @@ namespace tmpl8
   // -----------------------------------------------------------
   void Game::Init()
   {
-    player = new Entity;
-    player->AddComponent<RenderComponent>(new Surface("assets/skier_32.png"), 6);
-    player->AddComponent<Transform>(vec2{
-      500.0f, (static_cast<float>(screen->GetHeight()) / 2.0f) - settings::tileSize / 2.0f
-      });
-    player->AddComponent<PlayerController>();
-    player->AddComponent<BoxCollider>(Bounds(*player, { 7.0f, 5.0f }, { 14.0f, 26.0f }), CollisionType::block);
-    player->AddComponent<Fysics>();
-
-    player->SetActive(false);
-
-    const auto border = new Entity;
-    border->AddComponent<RenderComponent>(&treeBorder, 1);
-    border->AddComponent<Transform>(vec2{ 0, -settings::tileSize });
-    border->AddComponent<BoxCollider>(Bounds(*border, { 0.0f, 0.0f }, {
-                                               static_cast<float>(treeBorder.GetWidth()),
-                                               static_cast<float>(treeBorder.GetHeight())
-      }), CollisionType::block);
-    border->AddComponent<Wrap>();
-
-    entities.push_back(border);
-
-    const auto border2 = new Entity;
-    border2->AddComponent<RenderComponent>(&treeBorder, 1);
-    border2->AddComponent<Transform>(vec2{ settings::rightScreenBound, -settings::tileSize });
-    border2->AddComponent<BoxCollider>(Bounds(*border2, { 0.0f, 0.0f }, {
-                                                static_cast<float>(treeBorder.GetWidth()),
-                                                static_cast<float>(treeBorder.GetHeight())
-      }), CollisionType::block);
-    border2->AddComponent<Wrap>();
-
-    entities.push_back(border2);
   }
 
   // -----------------------------------------------------------

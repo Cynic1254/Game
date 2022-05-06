@@ -63,7 +63,7 @@ void ScoreboardManager::SaveScores()
     temp.score = score.first;
     temp.name = score.second;
 
-    file << score.first << score.second << std::endl;
+    file << score.first << " " << score.second << std::endl;
   }
 
   file.close();
