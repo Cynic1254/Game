@@ -12,8 +12,8 @@ class Difficulty :
   public Button
 {
 public:
-  Difficulty(tmpl8::Sprite* sprite, tmpl8::vec2 pos, int difficulty) :
-    Button(sprite, pos),
+  Difficulty(tmpl8::Sprite* sprite, tmpl8::vec2 pos, int difficulty, bool startOnButton = false) :
+    Button(sprite, pos, startOnButton),
     difficulty(difficulty)
   {}
 
@@ -31,20 +31,6 @@ public:
    */
   void OnClick(Menu* menu) override;
 
-  /**
-   * \brief for game controllers, method get called on d-pad press
-   */
-  void Left() override;
-  /**
-   * \brief for game controllers, method get called on d-pad press
-   */
-  void Right() override;
-
-  /**
-   * \brief for game controllers, method gets called on button press
-   * \param menu the mnu the button is stored in
-   */
-  void ButtonDown(Menu* menu) override;
 private:
   Difficulty* buttons[2] = { nullptr, nullptr };
 

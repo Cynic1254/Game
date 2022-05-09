@@ -3,6 +3,7 @@
 #include "game.h"
 #include "surface.h"
 
+class Exit;
 class Difficulty;
 
 class Start :
@@ -10,7 +11,7 @@ class Start :
 {
 public:
   Start() :
-    Button(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/start.png"), 2), { ScreenWidth / 2.0f - 32, ScreenHeight / 2.0f - 16 }, true)
+    Button(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/start.png"), 2), { ScreenWidth / 2.0f - 32, ScreenHeight / 2.0f - 16 }, true, true)
   {}
 
   /**
@@ -25,39 +26,19 @@ public:
    * \param normal normal button
    * \param hard hard button
    */
-  void SetButtons(Difficulty& easy, Difficulty& normal, Difficulty& hard)
+  void SetButtons(Difficulty& easy, Difficulty& normal, Difficulty& hard, Exit& exit)
   {
     this->easy = &easy;
     this->normal = &normal;
     this->hard = &hard;
+    this->exit = &exit;
   }
-
-  /**
-   * \brief for game controllers, method get called on d-pad press
-   */
-  void Up() override;
-  /**
-   * \brief for game controllers, method get called on d-pad press
-   */
-  void Down() override;
-  /**
-   * \brief for game controllers, method get called on d-pad press
-   */
-  void Left() override;
-  /**
-   * \brief for game controllers, method get called on d-pad press
-   */
-  void Right() override;
-
-  /**
-   * \brief for game controllers, method gets called on button press
-   * \param menu the mnu the button is stored in
-   */
-  void ButtonDown(Menu* menu) override;
 
 private:
   Difficulty* easy = nullptr;
   Difficulty* normal = nullptr;
   Difficulty* hard = nullptr;
+
+  Exit* exit = nullptr;
 };
 

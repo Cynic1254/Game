@@ -6,7 +6,7 @@
 
 #include "BoxCollider.h"
 #include "EntityManager.h"
-#include "Fysics.h"
+#include "Physics.h"
 #include "Menu.h"
 #include "ObjectController.h"
 #include "PlayerController.h"
@@ -81,7 +81,7 @@ namespace tmpl8
       });
     player->AddComponent<PlayerController>();
     player->AddComponent<BoxCollider>(Bounds(*player, { 7.0f, 5.0f }, { 14.0f, 26.0f }), CollisionType::block);
-    player->AddComponent<Fysics>();
+    player->AddComponent<Physics>();
 
     player->SetActive(false);
 
@@ -276,7 +276,7 @@ namespace tmpl8
       {
         if (collision == CollisionType::block)
         {
-          player->GetComponent<Fysics>()->CollidesWith(*player, *e);
+          player->GetComponent<Physics>()->CollidesWith(*player, *e);
         }
         else if (collision == CollisionType::hurt)
         {

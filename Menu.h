@@ -47,8 +47,8 @@ private:
   {
     struct
     {
-      Difficulty* easy;
       Difficulty* normal;
+      Difficulty* easy;
       Difficulty* hard;
 
       Start* start;
@@ -59,7 +59,7 @@ private:
     Button* array[6];
   } buttons;
 
-  AudioPlayer click{"assets/sounds/button.wav"};
+  AudioPlayer click{ "assets/sounds/button.wav" };
 
   ScoreboardManager scoreboard;
   std::string input;

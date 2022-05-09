@@ -281,8 +281,8 @@ int main(int argc, char** argv)
 
   srand(static_cast<int>(time(NULL)));
 #ifdef _MSC_VER
-  //if (!redirectIO())
-  //  return 1;
+  /*if (!redirectIO())
+    return 1;*/
 #endif
   printf("application started.\n");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) < 0)
@@ -412,7 +412,7 @@ int main(int argc, char** argv)
       case SDL_CONTROLLERBUTTONDOWN:
         if(event.cbutton.button == SDL_CONTROLLER_BUTTON_B || event.cbutton.button == SDL_CONTROLLER_BUTTON_BACK)
         {
-          game->GetMenu()->GetExitButton()->ButtonDown(game->GetMenu());
+          game->GetMenu()->GetExitButton()->OnClick(game->GetMenu());
         }
         game->ButtonDown(event.cbutton.button);
         break;

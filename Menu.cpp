@@ -20,14 +20,21 @@ Menu::Menu() : menu(new tmpl8::Surface(ScreenWidth, ScreenHeight)) // NOLINT(cpp
   buttons.exit = new Exit();
 
   buttons.easy = new Difficulty(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/easy.png"), 2), { ScreenWidth / 2.0f - 64 - 128 - 10, ScreenHeight / 2.0f - 64 }, 1);
-  buttons.normal = new Difficulty(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/normal.png"), 2), { ScreenWidth / 2.0f - 64, ScreenHeight / 2.0f - 64 }, 2);
+  buttons.normal = new Difficulty(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/normal.png"), 2), { ScreenWidth / 2.0f - 64, ScreenHeight / 2.0f - 64 }, 2, true);
   buttons.hard = new Difficulty(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/hard.png"), 2), { ScreenWidth / 2.0f - 64 + 128 + 10, ScreenHeight / 2.0f - 64 }, 3);
 
-  buttons.start->SetButtons(*buttons.easy, *buttons.normal, *buttons.hard);
+  buttons.start->SetButtons(*buttons.easy, *buttons.normal, *buttons.hard, *buttons.exit);
   buttons.easy->SetButtons(*buttons.normal, *buttons.hard, *buttons.reset);
   buttons.normal->SetButtons(*buttons.easy, *buttons.hard, *buttons.reset);
   buttons.hard->SetButtons(*buttons.easy, *buttons.normal, *buttons.reset);
   buttons.exit->SetButtons(*buttons.easy, *buttons.normal, *buttons.hard, *buttons.reset);
+
+  buttons.easy->SetDirections(nullptr, nullptr, nullptr, buttons.normal);
+  buttons.normal->SetDirections(nullptr, nullptr, buttons.easy, buttons.hard);
+  buttons.hard->SetDirections(buttons.exit, nullptr, buttons.normal, nullptr);
+
+  buttons.exit->SetDirections(nullptr, buttons.hard, nullptr, nullptr);
+  buttons.reset->SetDirections(nullptr, nullptr, nullptr, buttons.exit);
 }
 
 Menu::~Menu()
@@ -55,7 +62,7 @@ void Menu::Render(tmpl8::Surface& dst) const
   if (state == 1)
   {
     menu->Print("Select Difficulty", 150, 150, 0x010101, 5);
-    RenderScores(menu, {250.0f, ScreenHeight - 211.0f});
+    RenderScores(menu, { 250.0f, ScreenHeight - 211.0f });
   }
 
   if (state == 2)
@@ -74,7 +81,7 @@ void Menu::Render(tmpl8::Surface& dst) const
     text = "enter name: " + input;
     menu->Print(text.c_str(), 200, 220, 0x010101, 2);
 
-    RenderScores(menu, {200.0f, 220.0f});
+    RenderScores(menu, { 200.0f, 220.0f });
   }
 
   menu->Draw(&dst, 0, 0);
@@ -110,62 +117,27 @@ void Menu::ButtonDown(Uint8 button)
     }
     break;
   case SDL_CONTROLLER_BUTTON_DPAD_UP:
-    if (state == 0)
-    {
-      buttons.start->Up();
-    }
     for (const auto button : buttons.array)
     {
-      if (button->IsActive() && button->MouseOnButton())
-      {
-        button->Up();
-        break;
-      }
+      button->Up();
     }
     break;
   case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
-    if (state == 0)
-    {
-      buttons.start->Down();
-    }
-
     for (const auto button : buttons.array)
     {
-      if (button->IsActive() && button->MouseOnButton())
-      {
-        button->Down();
-        break;
-      }
+      button->Down();
     }
     break;
   case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
-    if (state == 0)
-    {
-      buttons.start->Left();
-    }
-
     for (const auto button : buttons.array)
     {
-      if (button->IsActive() && button->MouseOnButton())
-      {
-        button->Left();
-        break;
-      }
+      button->Left();
     }
     break;
   case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
-    if (state == 0)
-    {
-      buttons.start->Right();
-    }
-
     for (const auto button : buttons.array)
     {
-      if (button->IsActive() && button->MouseOnButton())
-      {
-        button->Right();
-        break;
-      }
+      button->Right();
     }
     break;
   default:
@@ -222,24 +194,24 @@ void RenderScores(tmpl8::Surface* dst, tmpl8::vec2 pos)
 {
   const std::multimap<int, std::string, std::greater<>>& scores = ScoreboardManager::GetScores();
 
-    int loops = 0;
-    for (const auto& score : scores)
-    {
-      loops++;
-      if (loops > 10)
-        break;
+  int loops = 0;
+  for (const auto& score : scores)
+  {
+    loops++;
+    if (loops > 10)
+      break;
 
-      std::string text = std::to_string(loops) + ". " + score.second;
-      dst->Print(text.c_str(), static_cast<int>(pos.x), static_cast<int>(pos.y) + loops * 20, 0x010101, 2);
-      text = " :" + std::to_string(score.first);
-      dst->Print(text.c_str(),static_cast<int>(pos.x) + 180, static_cast<int>(pos.y) + loops * 20, 0x010101, 2);
-    }
+    std::string text = std::to_string(loops) + ". " + score.second;
+    dst->Print(text.c_str(), static_cast<int>(pos.x), static_cast<int>(pos.y) + loops * 20, 0x010101, 2);
+    text = " :" + std::to_string(score.first);
+    dst->Print(text.c_str(), static_cast<int>(pos.x) + 180, static_cast<int>(pos.y) + loops * 20, 0x010101, 2);
+  }
 }
 
 bool KeyHasChar(const SDL_Keycode key)
 {
   constexpr char c[] = "abcdefghijklmnopqrstuvwxyz0123456789!?:=,.-()#'*/";
-  for(const auto character : c)
+  for (const auto character : c)
   {
     if (key == character)
       return true;

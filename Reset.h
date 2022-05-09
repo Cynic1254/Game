@@ -7,7 +7,7 @@ class Reset :
 {
 public:
   Reset() :
-    Button(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/reset.png"), 2), 0.0f, false)
+    Button(new tmpl8::Sprite(new tmpl8::Surface("assets/UI/reset.png"), 2), 0.0f, true)
   {}
 
   /**

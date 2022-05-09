@@ -24,15 +24,11 @@ void Exit::OnClick(Menu* menu)
 
     reset->SetActive(false);
 
+    SetDirections(nullptr, hard, nullptr, nullptr);
+
     tmpl8::Game::Get().EndGame();
     break;
   default:
     break;
   }
-}
-
-void Exit::ButtonDown(Menu* menu)
-{
-  OnClick(menu);
-  normal->SetFucus(true);
 }

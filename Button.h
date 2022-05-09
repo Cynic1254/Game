@@ -22,10 +22,11 @@ enum class GameStates
 class Button
 {
 public:
-  Button(tmpl8::Sprite* sprite, const tmpl8::vec2 pos = 0.0f, bool active = false) :
+  Button(tmpl8::Sprite* sprite, const tmpl8::vec2 pos = 0.0f, bool startOnButton = false, bool active = false) :
     pos(pos),
     sprite(sprite),
-    active(active)
+    active(active),
+    startOnButton(startOnButton)
   {}
 
   virtual ~Button();
@@ -38,8 +39,8 @@ public:
 
   /**
    * \brief mouse moved
-   * \param x 
-   * \param y 
+   * \param x the x axis
+   * \param y the y axis
    */
   void MouseMove(int x, int y);
 
@@ -53,36 +54,61 @@ public:
   bool MouseOnButton() const { return onButton; }
   tmpl8::vec2 GetPos() const { return pos; }
 
-  void SetActive(bool state) { active = state; }
+  /**
+   * \brief Determines if the button will render
+   * \param state is the button active
+   */
+  void SetActive(bool state);
 
-  void SetFucus(bool state) { onButton = state; }
+  /**
+   * \brief will change the button frame to look "pressed"
+   * \param state is the button "pressed"
+   */
+  void SetState(bool state) { onButton = state; }
 
   /**
    * \brief for game controllers, method get called on d-pad press
    */
-  virtual void Up();
+  void Up();
   /**
    * \brief for game controllers, method get called on d-pad press
    */
-  virtual void Down();
+  void Down();
   /**
    * \brief for game controllers, method get called on d-pad press
    */
-  virtual void Left();
+  void Left();
   /**
    * \brief for game controllers, method get called on d-pad press
    */
-  virtual void Right();
+  void Right();
   /**
    * \brief for game controllers, method gets called on button press
-   * \param menu the mnu the button is stored in
+   * \param menu the menu the button is stored in
    */
-  virtual void ButtonDown(Menu* menu) {}
+  void ButtonDown(Menu* menu);
+
+  void SetDirections(Button* up, Button* down, Button* left, Button* right) { this->up = up; this->down = down; this->left = left; this->right = right; }
 
 private:
+  Button* up = nullptr;
+  Button* down = nullptr;
+  Button* left = nullptr;
+  Button* right = nullptr;
   const tmpl8::vec2 pos;
   tmpl8::Sprite* sprite;
+
+  /**
+   * \brief if the button needs to be rendered
+   */
   bool active;
+
+  /**
+   * \brief if the button needs to show in a "pressed" state
+   */
   bool onButton = false;
+
+  const bool startOnButton = false;
+  static Button* currentFocus;
 };
 

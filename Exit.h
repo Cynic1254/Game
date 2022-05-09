@@ -35,11 +35,6 @@ public:
     this->reset = &reset;
   }
 
-  /**
-   * \brief for game controllers, method gets called on button press
-   * \param menu the mnu the button is stored in
-   */
-  void ButtonDown(Menu* menu) override;
 private:
   Difficulty* easy = nullptr;
   Difficulty* normal = nullptr;
