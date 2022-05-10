@@ -47,10 +47,10 @@ namespace tmpl8 {
   vec3 normalize(const vec3& v) { return v.normalized(); }
   vec3 cross(const vec3& a, const vec3& b) { return a.cross(b); }
   float dot(const vec3& a, const vec3& b) { return a.dot(b); }
-  vec3 operator * (const float& s, const vec3& v) { return vec3(v.x * s, v.y * s, v.z * s); }
-  vec3 operator * (const vec3& v, const float& s) { return vec3(v.x * s, v.y * s, v.z * s); }
-  vec4 operator * (const float& s, const vec4& v) { return vec4(v.x * s, v.y * s, v.z * s, v.w * s); }
-  vec4 operator * (const vec4& v, const float& s) { return vec4(v.x * s, v.y * s, v.z * s, v.w * s); }
+  vec3 operator * (const float& s, const vec3& v) { return { v.x * s, v.y * s, v.z * s }; }
+  vec3 operator * (const vec3& v, const float& s) { return { v.x * s, v.y * s, v.z * s }; }
+  vec4 operator * (const float& s, const vec4& v) { return { v.x * s, v.y * s, v.z * s, v.w * s }; }
+  vec4 operator * (const vec4& v, const float& s) { return { v.x * s, v.y * s, v.z * s, v.w * s }; }
   vec4 operator * (const vec4& v, const mat4& M)
   {
     const vec4 mx(M.cell[0], M.cell[4], M.cell[8], M.cell[12]);
@@ -112,11 +112,11 @@ namespace tmpl8 {
     return M;
   }
 
-  void NotifyUser(char* s)
+  [[ noreturn ]] void NotifyUser(const char* s)
   {
-    const HWND hApp = FindWindow(nullptr, TemplateVersion);
+    const HWND hApp = FindWindow(nullptr, TemplateVersion);  // NOLINT(misc-misplaced-const)
     MessageBox(hApp, s, "ERROR", MB_OK);
-    exit(0);
+    exit(0);  // NOLINT(concurrency-mt-unsafe)
   }
 
 }
@@ -155,17 +155,18 @@ bool redirectIO()
   coninfo.dwSize.Y = 500;
   SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
   HANDLE h1 = GetStdHandle(STD_OUTPUT_HANDLE);
-  int h2 = _open_osfhandle((intptr_t)h1, _O_TEXT);
+  int h2 = _open_osfhandle(reinterpret_cast<intptr_t>(h1), _O_TEXT);
   const FILE* fp = _fdopen(h2, "w");
-  *stdout = *fp;
+  *stdout = *fp;  // NOLINT(misc-non-copyable-objects)
   setvbuf(stdout, NULL, _IONBF, 0);
-  h1 = GetStdHandle(STD_INPUT_HANDLE), h2 = _open_osfhandle((intptr_t)h1, _O_TEXT);
-  fp = _fdopen(h2, "r"), * stdin = *fp;
+  h1 = GetStdHandle(STD_INPUT_HANDLE), h2 = _open_osfhandle(reinterpret_cast<intptr_t>(h1), _O_TEXT);
+  fp = _fdopen(h2, "r"), * stdin = *fp;  // NOLINT(misc-non-copyable-objects)
   setvbuf(stdin, NULL, _IONBF, 0);
-  h1 = GetStdHandle(STD_ERROR_HANDLE), h2 = _open_osfhandle((intptr_t)h1, _O_TEXT);
-  fp = _fdopen(h2, "w"), * stderr = *fp;
+  h1 = GetStdHandle(STD_ERROR_HANDLE), h2 = _open_osfhandle(reinterpret_cast<intptr_t>(h1), _O_TEXT);
+  fp = _fdopen(h2, "w"), * stderr = *fp;  // NOLINT(misc-non-copyable-objects)
   setvbuf(stderr, NULL, _IONBF, 0);
   ios::sync_with_stdio();
+  // ReSharper disable once CppEntityAssignedButNoRead
   FILE* stream;
   if ((stream = freopen("CON", "w", stdout)) == NULL)
     return false;
@@ -279,10 +280,10 @@ int main(int argc, char** argv)
 {
   SDL_SetHintWithPriority(SDL_HINT_RENDER_VSYNC, "0", SDL_HINT_OVERRIDE);
 
-  srand(static_cast<int>(time(NULL)));
+  srand(static_cast<int>(time(NULL)));  // NOLINT(cert-msc51-cpp)
 #ifdef _MSC_VER
-  if (!redirectIO())
-    return 1;
+  /*if (!redirectIO())
+    return 1;*/
 #endif
   printf("application started.\n");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) < 0)
@@ -312,14 +313,15 @@ int main(int argc, char** argv)
   SDL_Texture* frameBuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, ScreenWidth, ScreenHeight);
 #endif
 
+  SDL_Surface* icon = SDL_LoadBMP("assets/UI/icon.bmp");
+  SDL_SetWindowIcon(window, icon);
+  SDL_FreeSurface(icon);
+
+
   SDL_DisplayMode display;
   SDL_GetCurrentDisplayMode(0, &display);
 
   SDL_SetWindowResizable(window, SDL_TRUE);
-
-  SDL_Surface* icon = SDL_LoadBMP("assets/UI/heart.bmp");
-  SDL_SetWindowIcon(window, icon);
-  SDL_FreeSurface(icon);
 
   //const vec2 screenRes = {static_cast<float>(display.w), static_cast<float>(display.h)};
 
@@ -429,7 +431,7 @@ int main(int argc, char** argv)
         switch (event.window.event)
         {
         case SDL_WINDOWEVENT_RESIZED:
-          game->resizeWindow({static_cast<float>(event.window.data1), static_cast<float>(event.window.data2)});
+          game->resizeWindow({ static_cast<float>(event.window.data1), static_cast<float>(event.window.data2) });
           break;
         default:
           break;
@@ -439,7 +441,7 @@ int main(int argc, char** argv)
         break;
       }
     }
-  }
+}
   game->Shutdown();
   delete game;
   SDL_GameControllerClose(gameController);
