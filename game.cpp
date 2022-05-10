@@ -226,7 +226,8 @@ namespace tmpl8
     {
       x = static_cast<int>(static_cast<float>(x) / screenSize.x * static_cast<float>(screen->GetWidth()));
       y = static_cast<int>(static_cast<float>(y) / screenSize.y * static_cast<float>(screen->GetHeight()));
-    } else
+    }
+    else
     {
       x = static_cast<int>(static_cast<float>(x) / windowSize.x * static_cast<float>(screen->GetWidth()));
       y = static_cast<int>(static_cast<float>(y) / windowSize.y * static_cast<float>(screen->GetHeight()));

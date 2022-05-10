@@ -317,13 +317,11 @@ int main(int argc, char** argv)
   SDL_SetWindowIcon(window, icon);
   SDL_FreeSurface(icon);
 
-
   SDL_DisplayMode display;
   SDL_GetCurrentDisplayMode(0, &display);
 
   SDL_SetWindowResizable(window, SDL_TRUE);
-
-  //const vec2 screenRes = {static_cast<float>(display.w), static_cast<float>(display.h)};
+  SDL_SetWindowMinimumSize(window, ScreenWidth / 2, ScreenHeight / 2);
 
   game = new Game({ static_cast<float>(display.w), static_cast<float>(display.h) }, isFullscreen);
   game->SetTarget(surface);
@@ -441,7 +439,7 @@ int main(int argc, char** argv)
         break;
       }
     }
-}
+  }
   game->Shutdown();
   delete game;
   SDL_GameControllerClose(gameController);
