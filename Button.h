@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SDL_mouse.h>
+
 #include "template.h"
 
 class Menu;
@@ -42,7 +44,7 @@ public:
    * \param x the x axis
    * \param y the y axis
    */
-  void MouseMove(int x, int y);
+  void MouseMove(int x, int y, SDL_Cursor&, SDL_Cursor&);
 
   /**
    * \brief render the button

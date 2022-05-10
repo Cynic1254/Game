@@ -1,6 +1,10 @@
 #include "Button.h"
 
+#include <SDL_mouse.h>
+
 #include "surface.h"
+#include "game.h"
+#include "Menu.h"
 
 Button* Button::currentFocus = nullptr;
 
@@ -9,7 +13,7 @@ Button::~Button()
   delete sprite;
 }
 
-void Button::MouseMove(int x, int y)
+void Button::MouseMove(int x, int y, SDL_Cursor& arrow, SDL_Cursor& hand)
 {
   const tmpl8::vec2 min = pos;
   const tmpl8::vec2 max = min + tmpl8::vec2{ static_cast<float>(sprite->GetWidth()), static_cast<float>(sprite->GetHeight()) };
@@ -20,11 +24,16 @@ void Button::MouseMove(int x, int y)
     onButton = true;
     if (active)
     {
+      SDL_SetCursor(&hand);
       currentFocus = this;
     }
   }
   else
   {
+    if(onButton && active)
+    {
+      SDL_SetCursor(&arrow);
+    }
     onButton = false;
   }
 }
@@ -48,6 +57,7 @@ void Button::Render(tmpl8::Surface* dst) const
 void Button::SetActive(bool state)
 {
   active = state;
+  SDL_SetCursor(tmpl8::Game::Get().GetMenu()->GetArrowCursor());
   onButton = false;
 }
 

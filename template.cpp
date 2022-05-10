@@ -277,12 +277,12 @@ bool isFullscreen = false;
 
 int main(int argc, char** argv)
 {
-  SDL_SetHintWithPriority(SDL_HINT_RENDER_VSYNC, "0", SDL_HINT_OVERRIDE); 
+  SDL_SetHintWithPriority(SDL_HINT_RENDER_VSYNC, "0", SDL_HINT_OVERRIDE);
 
   srand(static_cast<int>(time(NULL)));
 #ifdef _MSC_VER
-  /*if (!redirectIO())
-    return 1;*/
+  if (!redirectIO())
+    return 1;
 #endif
   printf("application started.\n");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) < 0)
@@ -314,6 +314,12 @@ int main(int argc, char** argv)
 
   SDL_DisplayMode display;
   SDL_GetCurrentDisplayMode(0, &display);
+
+  SDL_SetWindowResizable(window, SDL_TRUE);
+
+  SDL_Surface* icon = SDL_LoadBMP("assets/UI/heart.bmp");
+  SDL_SetWindowIcon(window, icon);
+  SDL_FreeSurface(icon);
 
   //const vec2 screenRes = {static_cast<float>(display.w), static_cast<float>(display.h)};
 
@@ -410,7 +416,7 @@ int main(int argc, char** argv)
           game->JoystickMove(event.caxis.axis, 0);
         break;
       case SDL_CONTROLLERBUTTONDOWN:
-        if(event.cbutton.button == SDL_CONTROLLER_BUTTON_B || event.cbutton.button == SDL_CONTROLLER_BUTTON_BACK)
+        if (event.cbutton.button == SDL_CONTROLLER_BUTTON_B || event.cbutton.button == SDL_CONTROLLER_BUTTON_BACK)
         {
           game->GetMenu()->GetExitButton()->OnClick(game->GetMenu());
         }
@@ -418,6 +424,16 @@ int main(int argc, char** argv)
         break;
       case SDL_CONTROLLERBUTTONUP:
         game->ButtonUp(event.cbutton.button);
+        break;
+      case SDL_WINDOWEVENT:
+        switch (event.window.event)
+        {
+        case SDL_WINDOWEVENT_RESIZED:
+          game->resizeWindow({static_cast<float>(event.window.data1), static_cast<float>(event.window.data2)});
+          break;
+        default:
+          break;
+        }
         break;
       default:
         break;

@@ -15,6 +15,9 @@ bool KeyHasChar(const SDL_Keycode key);
 
 Menu::Menu() : menu(new tmpl8::Surface(ScreenWidth, ScreenHeight)) // NOLINT(cppcoreguidelines-pro-type-member-init)
 {
+  arrow = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
+  hand = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
+
   buttons.start = new Start();
   buttons.reset = new Reset();
   buttons.exit = new Exit();
@@ -44,6 +47,10 @@ Menu::~Menu()
   {
     delete button;
   }
+
+  SDL_SetCursor(arrow);
+  SDL_FreeCursor(arrow);
+  SDL_FreeCursor(hand);
 }
 
 void Menu::Render(tmpl8::Surface& dst) const
@@ -91,7 +98,7 @@ void Menu::MouseMove(int x, int y) const
 {
   for (const auto button : buttons.array)
   {
-    button->MouseMove(x, y);
+    button->MouseMove(x, y,*arrow,*hand);
   }
 }
 
