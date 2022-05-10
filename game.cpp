@@ -37,7 +37,7 @@ namespace tmpl8
 
   Game::Game(const vec2 screenRes, bool isFullscreen) :
     isFullscreen(isFullscreen),
-    screenRes(screenRes)
+    screenSize(screenRes)
   {
     assert(theGame == nullptr);
     theGame = this;
@@ -224,8 +224,13 @@ namespace tmpl8
   {
     if (isFullscreen)
     {
-      x = static_cast<int>(static_cast<float>(x) / screenRes.x * static_cast<float>(screen->GetWidth()));
-      y = static_cast<int>(static_cast<float>(y) / screenRes.y * static_cast<float>(screen->GetHeight()));
+      x = static_cast<int>(static_cast<float>(x) / screenSize.x * static_cast<float>(screen->GetWidth()));
+      y = static_cast<int>(static_cast<float>(y) / screenSize.y * static_cast<float>(screen->GetHeight()));
+    }
+    else
+    {
+      x = static_cast<int>(static_cast<float>(x) / windowSize.x * static_cast<float>(screen->GetWidth()));
+      y = static_cast<int>(static_cast<float>(y) / windowSize.y * static_cast<float>(screen->GetHeight()));
     }
 
     mousePos = { static_cast<float>(x), static_cast<float>(y) };

@@ -38,6 +38,7 @@ public:
 
   void KeyDown(SDL_Keycode key);
 
+  SDL_Cursor* GetArrowCursor() const {return arrow;}
 private:
   tmpl8::Surface* menu;
 
@@ -63,4 +64,7 @@ private:
 
   ScoreboardManager scoreboard;
   std::string input;
+
+  SDL_Cursor* arrow;
+  SDL_Cursor* hand;
 };

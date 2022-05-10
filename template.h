@@ -208,7 +208,7 @@ namespace tmpl8 {
   {
   public:
     mat4();
-    float cell[16];
+    float cell[16]{};
     float& operator [] (const int idx) { return cell[idx]; }
     static mat4 identity();
     static mat4 rotate(vec3 v, float a);

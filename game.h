@@ -56,7 +56,8 @@ namespace tmpl8
 
     Menu* GetMenu() const { return menu; }
 
-    void setFullscreen(bool Fullscreen) {isFullscreen = Fullscreen;}
+    void setFullscreen(bool Fullscreen) { isFullscreen = Fullscreen; }
+    void resizeWindow(vec2 newSize) { windowSize = newSize; }
 
     void JoystickMove(Uint8 axis, Sint16 value) const;
     void ButtonDown(Uint8 button) const;
@@ -82,6 +83,7 @@ namespace tmpl8
     bool isFullscreen;
 
     vec2 mousePos;
-    const vec2 screenRes;
+    const vec2 screenSize;
+    vec2 windowSize = { ScreenWidth, ScreenHeight };
   };
 }; // namespace Tmpl8

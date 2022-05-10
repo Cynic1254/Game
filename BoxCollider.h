@@ -46,7 +46,7 @@ public:
   /**
    * \brief checks if collider collides
    * \param collider collider to check against
-   * \return 
+   * \return
    */
   bool CollidesWith(const BoxCollider& collider) const;
 
@@ -55,8 +55,8 @@ public:
 
   /**
    * \brief debug function, renders colliders
-   * \param entity 
-   * \param screen 
+   * \param entity
+   * \param screen
    */
   void Render(Entity& entity, tmpl8::Surface& screen) override;
 
